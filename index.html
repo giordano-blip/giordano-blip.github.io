@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Giordano Araujo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0a0c10;
+      --bg2: #0f1218;
+      --bg3: #161b24;
+      --gold: #c9a84c;
+      --gold-dim: #8a6e30;
+      --gold-bright: #e8c46a;
+      --white: #f0ead8;
+      --gray: #8b8f97;
+      --gray-light: #c8cdd6;
+      --red-accent: #c0392b;
+      --border: rgba(201,168,76,0.18);
+      --border-subtle: rgba(255,255,255,0.06);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: .4;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 3rem;
+      background: rgba(10,12,16,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .nav-logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .8rem;
+      color: var(--gold);
+      letter-spacing: .1em;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .72rem;
+      color: var(--gray);
+      text-decoration: none;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 7rem 3rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(201,168,76,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,168,76,.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+    }
+
+    .hero-glow {
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,.07) 0%, transparent 70%);
+      top: -100px; right: -100px;
+      animation: pulse 8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.1); opacity: .7; }
+    }
+
+    .hero-content {
+      max-width: 900px;
+      position: relative;
+      z-index: 2;
+      animation: fadeUp .9s ease forwards;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .72rem;
+      color: var(--gold);
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+    }
+    .hero-tag::before {
+      content: '';
+      display: block;
+      width: 32px; height: 1px;
+      background: var(--gold);
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 7vw, 6rem);
+      font-weight: 700;
+      line-height: 1.05;
+      margin-bottom: .5rem;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-subtitle {
+      font-size: 1.05rem;
+      color: var(--gray-light);
+      max-width: 560px;
+      margin: 1.5rem 0 2.5rem;
+      font-weight: 300;
+      line-height: 1.7;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      padding: .75rem 2rem;
+      background: var(--gold);
+      color: var(--bg);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem;
+      font-weight: 500;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background .2s, transform .2s;
+    }
+    .btn-primary:hover { background: var(--gold-bright); transform: translateY(-2px); }
+
+    .btn-outline {
+      display: inline-block;
+      padding: .75rem 2rem;
+      border: 1px solid var(--gold-dim);
+      color: var(--gold);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem;
+      font-weight: 500;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: border-color .2s, color .2s, transform .2s;
+    }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold-bright); transform: translateY(-2px); }
+
+    /* ── STATS STRIP ── */
+    .stats-strip {
+      background: var(--bg3);
+      border-top: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 0;
+    }
+
+    .stat-item {
+      padding: 2rem 2.5rem;
+      border-right: 1px solid var(--border-subtle);
+      animation: fadeUp .7s ease forwards;
+    }
+    .stat-item:last-child { border-right: none; }
+
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: .25rem;
+    }
+
+    .stat-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .68rem;
+      color: var(--gray);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    /* ── SECTION SHARED ── */
+    section {
+      padding: 6rem 3rem;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 3.5rem;
+    }
+
+    .section-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .7rem;
+      color: var(--gold-dim);
+      letter-spacing: .1em;
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+      margin-left: .5rem;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--bg2);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .about-text p {
+      color: var(--gray-light);
+      margin-bottom: 1.2rem;
+      font-size: .95rem;
+      line-height: 1.8;
+    }
+
+    .about-text p strong {
+      color: var(--white);
+      font-weight: 500;
+    }
+
+    .about-right {}
+
+    .tag-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .6rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .68rem;
+      padding: .35rem .9rem;
+      border: 1px solid var(--border);
+      color: var(--gold-dim);
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      transition: border-color .2s, color .2s;
+    }
+    .tag:hover { border-color: var(--gold); color: var(--gold); cursor: default; }
+
+    .info-list {
+      list-style: none;
+    }
+    .info-list li {
+      display: flex;
+      gap: 1rem;
+      padding: .6rem 0;
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: .88rem;
+    }
+    .info-list li:last-child { border-bottom: none; }
+    .info-key {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .68rem;
+      color: var(--gold-dim);
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      min-width: 90px;
+      padding-top: .15rem;
+    }
+    .info-val { color: var(--gray-light); }
+
+    /* ── EDUCATION ── */
+    #education {}
+
+    .edu-card {
+      background: var(--bg2);
+      border: 1px solid var(--border-subtle);
+      padding: 2rem 2.5rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      transition: border-color .2s;
+    }
+    .edu-card:hover { border-color: var(--border); }
+    .edu-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--gold-dim);
+      transition: background .2s;
+    }
+    .edu-card:hover::before { background: var(--gold); }
+
+    .edu-school {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      margin-bottom: .3rem;
+    }
+    .edu-period {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .68rem;
+      color: var(--gold);
+      letter-spacing: .1em;
+      margin-bottom: .8rem;
+    }
+    .edu-detail {
+      font-size: .88rem;
+      color: var(--gray-light);
+      line-height: 1.7;
+    }
+    .edu-badge {
+      display: inline-block;
+      background: rgba(201,168,76,.1);
+      border: 1px solid var(--border);
+      padding: .2rem .65rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .62rem;
+      color: var(--gold-dim);
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      margin-right: .4rem;
+      margin-top: .5rem;
+    }
+
+    /* ── EXPERIENCES ── */
+    #experience {
+      background: var(--bg2);
+    }
+
+    .exp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .exp-card {
+      background: var(--bg3);
+      border: 1px solid var(--border-subtle);
+      padding: 1.75rem 2rem;
+      transition: border-color .2s, transform .2s;
+    }
+    .exp-card:hover { border-color: var(--border); transform: translateY(-3px); }
+
+    .exp-type {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .62rem;
+      color: var(--gold-dim);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: .6rem;
+    }
+
+    .exp-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      margin-bottom: .4rem;
+    }
+
+    .exp-org {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .72rem;
+      color: var(--gold);
+      margin-bottom: .75rem;
+    }
+
+    .exp-desc {
+      font-size: .85rem;
+      color: var(--gray);
+      line-height: 1.65;
+    }
+
+    /* ── AWARDS ── */
+    #awards {}
+
+    .awards-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .award-group h3 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .7rem;
+      color: var(--gold-dim);
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+      padding-bottom: .75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .award-item {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: .9rem;
+      align-items: flex-start;
+    }
+
+    .award-year {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .65rem;
+      color: var(--gold-dim);
+      min-width: 36px;
+      padding-top: .1rem;
+    }
+
+    .award-name {
+      font-size: .88rem;
+      color: var(--gray-light);
+      line-height: 1.45;
+    }
+
+    .award-name strong {
+      color: var(--white);
+      font-weight: 500;
+    }
+
+    /* ── BEYOND ── */
+    #beyond {
+      background: var(--bg2);
+    }
+
+    .beyond-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .beyond-card {
+      background: var(--bg3);
+      border: 1px solid var(--border-subtle);
+      padding: 2rem;
+      transition: border-color .2s;
+    }
+    .beyond-card:hover { border-color: var(--border); }
+
+    .beyond-icon {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .beyond-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      margin-bottom: .5rem;
+    }
+
+    .beyond-period {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .62rem;
+      color: var(--gold-dim);
+      letter-spacing: .08em;
+      margin-bottom: .75rem;
+    }
+
+    .beyond-desc {
+      font-size: .83rem;
+      color: var(--gray);
+      line-height: 1.6;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      text-align: center;
+      padding: 7rem 3rem;
+    }
+
+    #contact h2 {
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      margin-bottom: 1rem;
+    }
+
+    .contact-sub {
+      color: var(--gray);
+      max-width: 480px;
+      margin: 0 auto 2.5rem;
+      font-size: .95rem;
+    }
+
+    .contact-links {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem;
+      color: var(--gray);
+      text-decoration: none;
+      letter-spacing: .07em;
+      transition: color .2s;
+    }
+    .contact-link:hover { color: var(--gold); }
+    .contact-link .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--gold-dim);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 1.5rem 3rem;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-note {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .65rem;
+      color: var(--gray);
+      letter-spacing: .07em;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1.25rem 1.5rem; }
+      .nav-links { gap: 1.5rem; }
+      section { padding: 4rem 1.5rem; }
+      #hero { padding: 7rem 1.5rem 4rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .exp-grid { grid-template-columns: 1fr; }
+      .awards-columns { grid-template-columns: 1fr 1fr; }
+      .beyond-grid { grid-template-columns: 1fr 1fr; }
+      .stats-strip { grid-template-columns: 1fr 1fr; }
+      .stat-item:nth-child(2) { border-right: none; }
+      footer { flex-direction: column; gap: .5rem; text-align: center; }
+    }
+
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      h1 { font-size: 2.8rem; }
+      .awards-columns { grid-template-columns: 1fr; }
+      .beyond-grid { grid-template-columns: 1fr; }
+      .stats-strip { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* scroll-reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#hero">G.P.A</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#awards">Awards</a></li>
+    <li><a href="#beyond">Beyond</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-tag">São Paulo → Lafayette College</div>
+    <h1>Giordano<br><em>Piwowarczyk</em><br>Araujo</h1>
+    <p class="hero-subtitle">
+      Physics &amp; Computer Science student. Educator, builder, and curious mind at the intersection of technology and community. Incoming Class of 2030 at Lafayette College.
+    </p>
+    <div class="hero-ctas">
+      <a href="#experience" class="btn-primary">Explore My Work</a>
+      <a href="#contact" class="btn-outline">Get in Touch</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stat-item reveal">
+    <div class="stat-number">40+</div>
+    <div class="stat-label">Students taught via Code Kids</div>
+  </div>
+  <div class="stat-item reveal">
+    <div class="stat-number">3×</div>
+    <div class="stat-label">Duke of Edinburgh (Bronze–Gold)</div>
+  </div>
+  <div class="stat-item reveal">
+    <div class="stat-number">1st</div>
+    <div class="stat-label">Intelli Camp · 100+ participants</div>
+  </div>
+  <div class="stat-item reveal">
+    <div class="stat-number">IB</div>
+    <div class="stat-label">HL Physics · CS · Maths</div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header reveal">
+    <span class="section-num">01</span>
+    <h2>About</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>
+        I'm a Brazilian-Polish student from São Paulo, currently completing the <strong>IB Diploma</strong> at St. Paul's School with Higher Level subjects in Physics, Computer Science, and Mathematics. I will be joining <strong>Lafayette College</strong> in the United States, having been accepted through Early Decision.
+      </p>
+      <p>
+        My intellectual interests sit at the junction of <strong>physics, computing, and education</strong>. I've explored everything from the luminous efficacy of LEDs for my Extended Essay, to building mathematical models of rowing boat motion using higher derivatives and real Championship data.
+      </p>
+      <p>
+        Beyond the classroom, I believe technology is most powerful when it's shared. I've led Code Kids — a community program teaching Python to students in a state school in Vila Madalena — since 2022, and have taught programming across multiple initiatives including JuntosNaTech and an AI &amp; Machine Learning enrichment course.
+      </p>
+      <p>
+        Outside of tech and science, I'm a competitive rower, a choir singer, and a Kung Fu practitioner — disciplines that have each taught me something about <strong>precision, patience, and the pursuit of mastery</strong>.
+      </p>
+    </div>
+    <div class="about-right reveal">
+      <div class="tag-cloud">
+        <span class="tag">Physics</span>
+        <span class="tag">Computer Science</span>
+        <span class="tag">Mathematics</span>
+        <span class="tag">Machine Learning</span>
+        <span class="tag">Python</span>
+        <span class="tag">Java</span>
+        <span class="tag">Education</span>
+        <span class="tag">Community</span>
+        <span class="tag">Rowing</span>
+        <span class="tag">Quantum Computing</span>
+        <span class="tag">AI</span>
+        <span class="tag">Leadership</span>
+      </div>
+      <ul class="info-list">
+        <li><span class="info-key">Location</span><span class="info-val">São Paulo, Brazil</span></li>
+        <li><span class="info-key">University</span><span class="info-val">Lafayette College, Class of 2030</span></li>
+        <li><span class="info-key">School</span><span class="info-val">St. Paul's School — IB Diploma</span></li>
+        <li><span class="info-key">Languages</span><span class="info-val">Portuguese (native), English (fluent), Spanish</span></li>
+        <li><span class="info-key">Email</span><span class="info-val">giordanoparaujo2@gmail.com</span></li>
+        <li><span class="info-key">Domain</span><span class="info-val">thegiordano.tech</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="section-header reveal">
+    <span class="section-num">02</span>
+    <h2>Education</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="edu-card reveal">
+    <div class="edu-school">Lafayette College</div>
+    <div class="edu-period">2026 — Present · Easton, Pennsylvania, USA</div>
+    <div class="edu-detail">Accepted Early Decision I. Incoming member of the Class of 2030.</div>
+  </div>
+
+  <div class="edu-card reveal">
+    <div class="edu-school">St. Paul's School</div>
+    <div class="edu-period">2022 — Present · São Paulo, Brazil</div>
+    <div class="edu-detail">
+      <strong style="color:var(--white)">IB Diploma Programme (2024–2026)</strong><br>
+      HL: Physics · Computer Science · Mathematics Analysis &amp; Approaches<br>
+      SL: English Language &amp; Literature · Portuguese Literature · Economics
+    </div>
+    <div style="margin-top:.75rem">
+      <span class="edu-badge">Extended Essay — LED Luminous Efficacy</span>
+      <span class="edu-badge">School Council Rep</span>
+      <span class="edu-badge">Digital Ambassador</span>
+    </div>
+  </div>
+
+  <div class="edu-card reveal">
+    <div class="edu-school">St. Paul's School — IGCSE</div>
+    <div class="edu-period">2022 — 2024 · São Paulo, Brazil</div>
+    <div class="edu-detail">
+      Mathematics A* · Physics A* · Chemistry A* · Computer Science A* · Music A* · Spanish A* · Biology A · English Literature A
+    </div>
+  </div>
+
+  <div class="edu-card reveal">
+    <div class="edu-school">Yale Young Global Scholars — IST Track</div>
+    <div class="edu-period">July 2024 · New Haven, Connecticut, USA</div>
+    <div class="edu-detail">
+      Two-week academic enrichment programme. Attended graduate-level seminars and completed a group project on <em>nuclear propulsion for rockets</em>. One of fewer than 3% of applicants selected globally.
+    </div>
+  </div>
+
+  <div class="edu-card reveal">
+    <div class="edu-school">Colégio Objetivo</div>
+    <div class="edu-period">2017 — 2022 · São Paulo, Brazil</div>
+    <div class="edu-detail">Primary and lower secondary education. Early foundations in mathematics and sciences.</div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-header reveal">
+    <span class="section-num">03</span>
+    <h2>Experience &amp; Projects</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="exp-grid">
+
+    <div class="exp-card reveal">
+      <div class="exp-type">Community · Leadership</div>
+      <div class="exp-title">Code Kids — Project Leader</div>
+      <div class="exp-org">EE Carlos Maximiliano · Aug 2022 – Present</div>
+      <div class="exp-desc">Lead a team of 8 volunteers teaching Python to 11–14 year-olds in a state school in Vila Madalena. Programme has reached 40+ children in its sixth year. Began as instructor and was promoted to leader in 2024.</div>
+    </div>
+
+    <div class="exp-card reveal">
+      <div class="exp-type">School · Leadership</div>
+      <div class="exp-title">Digital Ambassador</div>
+      <div class="exp-org">St. Paul's School · Jun 2023 – Present</div>
+      <div class="exp-desc">Teaches weekly Python lessons to Forms 1–3, preparing students for the Brazilian Informatics Olympiad (OBI). Advocates for responsible technology use alongside school Digital Leaders.</div>
+    </div>
+
+    <div class="exp-card reveal">
+      <div class="exp-type">Competition · Innovation</div>
+      <div class="exp-title">Intelli Camp — 1st Place</div>
+      <div class="exp-org">July 2025</div>
+      <div class="exp-desc">Won first place among 12 teams and 100+ participants. Built a complete MVP of an automated social listening tool integrating NLP, AI, and business strategy in five intensive days.</div>
+    </div>
+
+    <div class="exp-card reveal">
+      <div class="exp-type">Industry · Work Shadowing</div>
+      <div class="exp-title">Work Shadowing</div>
+      <div class="exp-org">VIVO Telecomunicações · April 2025</div>
+      <div class="exp-desc">One-week immersion at one of Brazil's leading telcos. Attended department lectures, visited infrastructure centres, and engaged with executives across technical and operational roles.</div>
+    </div>
+
+    <div class="exp-card reveal">
+      <div class="exp-type">Teaching · Community</div>
+      <div class="exp-title">JuntosNaTech — Java Instructor</div>
+      <div class="exp-org">Instituto Unidos de Paraisópolis · May 2025 – Sep 2026</div>
+      <div class="exp-desc">Teaching basic and intermediate Java programming as part of an initiative to democratise technology access in underserved communities.</div>
+    </div>
+
+    <div class="exp-card reveal">
+      <div class="exp-type">Teaching · AI</div>
+      <div class="exp-title">AI, Python &amp; Machine Learning Enrichment</div>
+      <div class="exp-org">Co-taught · Aug 2025 – Present</div>
+      <div class="exp-desc">Co-designed and co-teaches a course on responsible AI use, Python data extraction from large databases, and ML fundamentals. Regularly shares curated resources and industry updates.</div>
+    </div>
+
+    <div class="exp-card reveal">
+      <div class="exp-type">Research · Mathematics</div>
+      <div class="exp-title">Mathematical Modelling of Rowing Motion</div>
+      <div class="exp-org">Independent Research · Aug 2025 – Present</div>
+      <div class="exp-desc">Models 1D boat movement using Physics and higher derivatives. Analysed World Rowing Championship velocity data; demonstrated why constant speed is more energy-efficient than oscillating acceleration.</div>
+    </div>
+
+    <div class="exp-card reveal">
+      <div class="exp-type">Conference · Tech</div>
+      <div class="exp-title">HackTown 2025 Attendee</div>
+      <div class="exp-org">Santa Rita do Sapucaí · Jul–Aug 2025</div>
+      <div class="exp-desc">Attended Brazil's flagship tech &amp; entrepreneurship festival. Explored quantum computing startups, automation with Node-RED and n8n, AI risk, cybersecurity, and low-code platforms.</div>
+    </div>
+
+    <div class="exp-card reveal">
+      <div class="exp-type">Service · Education</div>
+      <div class="exp-title">We Teach — English Tutor</div>
+      <div class="exp-org">Alessandro Zarzur Foundation · 2023–2024</div>
+      <div class="exp-desc">Delivered tailored online English lessons to students at FAZ, aligning content with their school curriculum as part of a community service initiative.</div>
+    </div>
+
+    <div class="exp-card reveal">
+      <div class="exp-type">Academic · Society</div>
+      <div class="exp-title">Engineering Society — Lead Member</div>
+      <div class="exp-org">St. Paul's School · Aug 2025 – Present</div>
+      <div class="exp-desc">Delivered formal presentations on the History of Artificial Intelligence and on GPU/CPU/TPU architecture and their role in machine learning and high-performance computing.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- AWARDS -->
+<section id="awards">
+  <div class="section-header reveal">
+    <span class="section-num">04</span>
+    <h2>Honours &amp; Awards</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="awards-columns">
+    <div class="award-group reveal">
+      <h3>International</h3>
+      <div class="award-item">
+        <span class="award-year">2025</span>
+        <span class="award-name"><strong>Gold — Duke of Edinburgh's Award</strong></span>
+      </div>
+      <div class="award-item">
+        <span class="award-year">2024</span>
+        <span class="award-name"><strong>Silver — Duke of Edinburgh's Award</strong></span>
+      </div>
+      <div class="award-item">
+        <span class="award-year">2024</span>
+        <span class="award-name"><strong>Bronze — UKMT Intermediate Mathematical Challenge</strong></span>
+      </div>
+      <div class="award-item">
+        <span class="award-year">2023</span>
+        <span class="award-name"><strong>Bronze — Duke of Edinburgh's Award</strong></span>
+      </div>
+      <div class="award-item">
+        <span class="award-year">2017</span>
+        <span class="award-name">Honour to Merit — Maths Kangaroo</span>
+      </div>
+      <h3 style="margin-top:2rem">Music (LCME)</h3>
+      <div class="award-item">
+        <span class="award-year">2023</span>
+        <span class="award-name">LCM Theory Grade 3</span>
+      </div>
+      <div class="award-item">
+        <span class="award-year">2022</span>
+        <span class="award-name">LCM Theory Grade 2</span>
+      </div>
+    </div>
+    <div class="award-group reveal">
+      <h3>National (Brazil)</h3>
+      <div class="award-item">
+        <span class="award-year">2023</span>
+        <span class="award-name"><strong>Silver — OBF</strong> (Brazilian Physics Olympiad)</span>
+      </div>
+      <div class="award-item">
+        <span class="award-year">2021</span>
+        <span class="award-name"><strong>Bronze — OBQjr</strong> (Junior Chemistry Olympiad)</span>
+      </div>
+      <div class="award-item">
+        <span class="award-year">2021</span>
+        <span class="award-name">Honour to Merit — OBA (Astronomy Olympiad)</span>
+      </div>
+      <div class="award-item">
+        <span class="award-year">2020</span>
+        <span class="award-name"><strong>Gold — OBA</strong> (Astronomy Olympiad)</span>
+      </div>
+      <div class="award-item">
+        <span class="award-year">2019</span>
+        <span class="award-name"><strong>Gold — OBA</strong> (Astronomy Olympiad)</span>
+      </div>
+    </div>
+    <div class="award-group reveal">
+      <h3>School Prizes</h3>
+      <div class="award-item">
+        <span class="award-year">2024</span>
+        <span class="award-name"><strong>Excellence in Physics</strong> — St. Paul's School</span>
+      </div>
+      <div class="award-item">
+        <span class="award-year">2023</span>
+        <span class="award-name"><strong>Excellence in BraSS</strong> — Brazilian Social Studies</span>
+      </div>
+      <div class="award-item">
+        <span class="award-year">2023</span>
+        <span class="award-name">House Award — Outstanding participation</span>
+      </div>
+      <h3 style="margin-top:2rem">State</h3>
+      <div class="award-item">
+        <span class="award-year">2018</span>
+        <span class="award-name"><strong>Silver — OPF</strong> (State Physics Olympiad)</span>
+      </div>
+      <div class="award-item">
+        <span class="award-year">2017</span>
+        <span class="award-name"><strong>Gold — OPF Júnior</strong> (State Physics Olympiad)</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BEYOND -->
+<section id="beyond">
+  <div class="section-header reveal">
+    <span class="section-num">05</span>
+    <h2>Beyond the Desk</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="beyond-grid">
+    <div class="beyond-card reveal">
+      <div class="beyond-icon">🚣</div>
+      <div class="beyond-title">Competitive Rowing</div>
+      <div class="beyond-period">2022 — 2025</div>
+      <div class="beyond-desc">Completed a 4,000m regatta in a single scull in 21:08. Experienced across multiple boat types. Rowing inspired my mathematical modelling research into the biomechanics of sculling.</div>
+    </div>
+    <div class="beyond-card reveal">
+      <div class="beyond-icon">🎵</div>
+      <div class="beyond-title">School Choir &amp; Singing</div>
+      <div class="beyond-period">2024 — Present</div>
+      <div class="beyond-desc">Active choir member and weekly private voice student. Performed at Christmas Service and Remembrance Day. Music has taught me that harmony begins with listening.</div>
+    </div>
+    <div class="beyond-card reveal">
+      <div class="beyond-icon">🥋</div>
+      <div class="beyond-title">Kung Fu</div>
+      <div class="beyond-period">2025 — Present</div>
+      <div class="beyond-desc">Pursuing Kung Fu as a discipline of precision and body awareness. The principle that guides me: not the strongest but the most precise wins.</div>
+    </div>
+    <div class="beyond-card reveal">
+      <div class="beyond-icon">🏫</div>
+      <div class="beyond-title">School Ambassador</div>
+      <div class="beyond-period">Jun 2023 — Present</div>
+      <div class="beyond-desc">Represents St. Paul's by guiding prospective families through campus, sharing what life at the school truly looks like from a student's perspective.</div>
+    </div>
+    <div class="beyond-card reveal">
+      <div class="beyond-icon">🏛️</div>
+      <div class="beyond-title">School Council Representative</div>
+      <div class="beyond-period">2023 — 2024</div>
+      <div class="beyond-desc">Worked directly with the Senior Leadership Team to identify and advocate for improvements to student life in the Senior School.</div>
+    </div>
+    <div class="beyond-card reveal">
+      <div class="beyond-icon">🔬</div>
+      <div class="beyond-title">Physics Olympiad Training</div>
+      <div class="beyond-period">May – Jul 2023</div>
+      <div class="beyond-desc">Monthly deep-dive workshops covering advanced Kinematics, Mechanics, Waves and Relativity. Preparation for the Brazilian Physics Olympiad where he earned Silver.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-header reveal" style="justify-content:center; text-align:center;">
+    <h2 style="font-size: clamp(2rem, 4vw, 3.2rem)">Let's Connect</h2>
+  </div>
+  <p class="contact-sub reveal">Whether you want to talk physics, build something together, or discuss education and community — I'm always glad to hear from you.</p>
+  <div class="contact-links reveal">
+    <a href="mailto:giordanoparaujo2@gmail.com" class="contact-link">
+      <span class="dot"></span>giordanoparaujo2@gmail.com
+    </a>
+    <a href="mailto:gpa1@stpauls.br" class="contact-link">
+      <span class="dot"></span>gpa1@stpauls.br
+    </a>
+    <a href="https://github.com" class="contact-link" target="_blank">
+      <span class="dot"></span>GitHub
+    </a>
+    <a href="https://linkedin.com" class="contact-link" target="_blank">
+      <span class="dot"></span>LinkedIn
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-note">© 2025 Giordano Piwowarczyk Araujo — thegiordano.tech</span>
+  <span class="footer-note">Built with purpose. Hosted on GitHub Pages.</span>
+</footer>
+
+<script>
+  // Scroll-reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
