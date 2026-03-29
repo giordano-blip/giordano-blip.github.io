@@ -1,32 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Giordano Araujo</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
   <style>
-    :root {
-      --bg: #0a0c10;
-      --bg2: #0f1218;
-      --bg3: #161b24;
-      --gold: #c9a84c;
-      --gold-dim: #8a6e30;
-      --gold-bright: #e8c46a;
-      --white: #f0ead8;
-      --gray: #8b8f97;
-      --gray-light: #c8cdd6;
-      --red-accent: #c0392b;
-      --border: rgba(201,168,76,0.18);
-      --border-subtle: rgba(255,255,255,0.06);
+    /* ════════════════════════════════════
+       THEME VARIABLES
+    ════════════════════════════════════ */
+    [data-theme="en"] {
+      --bg:           #0a0c10;
+      --bg2:          #0f1218;
+      --bg3:          #161b24;
+      --primary:      #c9a84c;
+      --primary-dim:  #8a6e30;
+      --primary-bright:#e8c46a;
+      --accent:       #c9a84c;
+      --white:        #f0ead8;
+      --gray:         #8b8f97;
+      --gray-light:   #c8cdd6;
+      --border:       rgba(201,168,76,0.18);
+      --border-subtle:rgba(255,255,255,0.06);
+      --noise-opacity:.4;
+      --flag-glow:    rgba(201,168,76,0.07);
+      --narrative-accent: #c9a84c;
+    }
+    [data-theme="pt"] {
+      --bg:           #060f09;
+      --bg2:          #091510;
+      --bg3:          #0d1d13;
+      --primary:      #F5C400;
+      --primary-dim:  #a88900;
+      --primary-bright:#ffe033;
+      --accent:       #00a83e;
+      --white:        #f0ede2;
+      --gray:         #8b9690;
+      --gray-light:   #c5cdc8;
+      --border:       rgba(245,196,0,0.2);
+      --border-subtle:rgba(255,255,255,0.06);
+      --noise-opacity:.35;
+      --flag-glow:    rgba(0,168,62,0.07);
+      --narrative-accent: #F5C400;
     }
 
+    /* ════════════════════════════════════
+       RESET & BASE
+    ════════════════════════════════════ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { scroll-behavior: smooth; }
-
     body {
       background: var(--bg);
       color: var(--white);
@@ -34,1014 +58,1288 @@
       font-weight: 300;
       line-height: 1.6;
       overflow-x: hidden;
+      transition: background .5s ease, color .5s ease;
     }
-
-    /* ── NOISE OVERLAY ── */
     body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 9999;
-      opacity: .4;
+      content:'';
+      position:fixed; inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events:none; z-index:9999; opacity:var(--noise-opacity);
     }
 
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.25rem 3rem;
-      background: rgba(10,12,16,0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border-subtle);
+    /* ════════════════════════════════════
+       LANGUAGE SELECTOR / LANDING
+    ════════════════════════════════════ */
+    #lang-selector {
+      position: fixed; inset: 0; z-index: 10000;
+      background: #050709;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 3rem;
+      transition: opacity .7s ease, visibility .7s ease;
     }
-
-    .nav-logo {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .8rem;
-      color: var(--gold);
-      letter-spacing: .1em;
-      text-decoration: none;
+    #lang-selector.hidden {
+      opacity: 0; visibility: hidden; pointer-events: none;
     }
-
-    .nav-links {
-      display: flex;
-      gap: 2.5rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .72rem;
-      color: var(--gray);
-      text-decoration: none;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      transition: color .2s;
-    }
-    .nav-links a:hover { color: var(--gold); }
-
-    /* ── HERO ── */
-    #hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      padding: 7rem 3rem 4rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-grid-bg {
-      position: absolute;
-      inset: 0;
+    .selector-grid-bg {
+      position:absolute; inset:0;
       background-image:
-        linear-gradient(rgba(201,168,76,.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(201,168,76,.04) 1px, transparent 1px);
-      background-size: 60px 60px;
-      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 50px 50px;
+      mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 20%, transparent 100%);
+    }
+    .selector-heading {
+      text-align:center; position:relative; z-index:2;
+    }
+    .selector-heading .name {
+      font-family:'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: 700; color: #f0ead8;
+      letter-spacing: -.01em;
+    }
+    .selector-heading .name em { font-style:italic; color:#c9a84c; }
+    .selector-heading .prompt {
+      font-family:'JetBrains Mono', monospace;
+      font-size: .75rem; color: #666; letter-spacing: .2em;
+      text-transform: uppercase; margin-top: .75rem;
+    }
+    .selector-buttons {
+      display: flex; gap: 2rem; flex-wrap: wrap;
+      justify-content: center; position: relative; z-index:2;
+    }
+    .lang-btn {
+      width: 280px; height: 180px;
+      border: none; cursor: pointer;
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 1rem;
+      transition: transform .3s ease, box-shadow .3s ease;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+    .lang-btn:hover { transform: translateY(-6px); }
+    .lang-btn::after {
+      content:''; position:absolute; inset:0;
+      background: rgba(255,255,255,0);
+      transition: background .3s ease;
+    }
+    .lang-btn:hover::after { background: rgba(255,255,255,.04); }
+
+    /* Brazil button */
+    .lang-btn.brazil {
+      background: linear-gradient(135deg, #063d1e 0%, #0a5a2a 50%, #063d1e 100%);
+      border: 1px solid rgba(245,196,0,.35);
+      box-shadow: 0 0 40px rgba(0,168,62,.15), inset 0 1px 0 rgba(245,196,0,.2);
+    }
+    .lang-btn.brazil:hover {
+      box-shadow: 0 20px 60px rgba(0,168,62,.25), inset 0 1px 0 rgba(245,196,0,.3);
+    }
+    .brazil-diamond {
+      width: 90px; height: 56px;
+      background: linear-gradient(135deg, #F5C400, #e8b000);
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .brazil-diamond::after {
+      content:'';
+      width: 40px; height: 40px; border-radius: 50%;
+      background: linear-gradient(135deg, #002776, #003399);
+      position:absolute;
+    }
+    .brazil-circle {
+      position:absolute; z-index:2;
+      width: 28px; height: 28px; border-radius:50%;
+      background: linear-gradient(135deg, #002776, #003399);
+      display:flex; align-items:center; justify-content:center;
+    }
+    .brazil-stars {
+      position:absolute; width:26px; height:26px;
+      border-radius:50%;
+      border: 1.5px solid rgba(255,255,255,.5);
+    }
+    .lang-label-pt {
+      font-family:'Libre Baskerville', serif;
+      font-size: 1.4rem; font-weight: 700;
+      color: #F5C400; letter-spacing: .05em;
+      text-shadow: 0 0 20px rgba(245,196,0,.4);
+    }
+    .lang-sublabel-pt {
+      font-family:'JetBrains Mono', monospace;
+      font-size: .65rem; color: rgba(245,196,0,.6);
+      letter-spacing: .15em; text-transform:uppercase;
     }
 
+    /* US button */
+    .lang-btn.usa {
+      background: linear-gradient(135deg, #0a0f2e 0%, #111844 50%, #0a0f2e 100%);
+      border: 1px solid rgba(178,34,52,.4);
+      box-shadow: 0 0 40px rgba(60,59,110,.2), inset 0 1px 0 rgba(255,255,255,.1);
+    }
+    .lang-btn.usa:hover {
+      box-shadow: 0 20px 60px rgba(178,34,52,.2), inset 0 1px 0 rgba(255,255,255,.15);
+    }
+    .usa-flag-icon {
+      width: 72px; height: 48px;
+      position: relative; overflow: hidden;
+      border: 1px solid rgba(255,255,255,.2);
+    }
+    .usa-stripes {
+      position:absolute; inset:0;
+      background: repeating-linear-gradient(
+        to bottom,
+        #B22234 0px, #B22234 3.7px,
+        #fff 3.7px, #fff 7.4px
+      );
+    }
+    .usa-canton {
+      position:absolute; top:0; left:0;
+      width:40%; height:54%;
+      background: #3C3B6E;
+      display:flex; align-items:center; justify-content:center;
+      flex-wrap:wrap; padding:2px;
+    }
+    .usa-canton::before {
+      content:'★ ★ ★\A★ ★ ★\A★ ★ ★';
+      white-space:pre;
+      font-size:4px; color:rgba(255,255,255,.9);
+      line-height:1.6; text-align:center;
+    }
+    .lang-label-en {
+      font-family:'Libre Baskerville', serif;
+      font-size: 1.4rem; font-weight: 700;
+      color: #fff; letter-spacing: .05em;
+      text-shadow: 0 0 20px rgba(255,255,255,.3);
+    }
+    .lang-sublabel-en {
+      font-family:'JetBrains Mono', monospace;
+      font-size: .65rem; color: rgba(255,255,255,.4);
+      letter-spacing: .15em; text-transform:uppercase;
+    }
+
+    /* ════════════════════════════════════
+       MAIN SITE (hidden until selected)
+    ════════════════════════════════════ */
+    #main-site {
+      display:none; opacity:0;
+      transition: opacity .6s ease;
+    }
+    #main-site.visible { display:block; }
+    #main-site.faded-in { opacity:1; }
+
+    /* ════════════════════════════════════
+       NAV
+    ════════════════════════════════════ */
+    nav {
+      position:fixed; top:0; left:0; right:0; z-index:100;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:1.25rem 3rem;
+      background:rgba(10,12,16,.85);
+      backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--border-subtle);
+      transition: background .5s;
+    }
+    [data-theme="pt"] nav { background:rgba(6,15,9,.85); }
+    .nav-logo {
+      font-family:'JetBrains Mono', monospace; font-size:.8rem;
+      color:var(--primary); letter-spacing:.1em; text-decoration:none;
+    }
+    .nav-links { display:flex; gap:2rem; list-style:none; align-items:center; }
+    .nav-links a {
+      font-family:'JetBrains Mono', monospace; font-size:.7rem;
+      color:var(--gray); text-decoration:none; letter-spacing:.08em;
+      text-transform:uppercase; transition:color .2s;
+    }
+    .nav-links a:hover { color:var(--primary); }
+    .lang-toggle-btn {
+      font-family:'JetBrains Mono', monospace; font-size:.65rem;
+      color:var(--primary); background:transparent;
+      border:1px solid var(--border); padding:.3rem .8rem;
+      cursor:pointer; letter-spacing:.1em; text-transform:uppercase;
+      transition:all .2s;
+    }
+    .lang-toggle-btn:hover { background:var(--primary); color:var(--bg); }
+
+    /* ════════════════════════════════════
+       HERO
+    ════════════════════════════════════ */
+    #hero {
+      min-height:100vh; display:flex; align-items:center;
+      padding:7rem 3rem 4rem; position:relative; overflow:hidden;
+    }
+    .hero-grid-bg {
+      position:absolute; inset:0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size:60px 60px;
+      mask-image:radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+      opacity:.5;
+    }
     .hero-glow {
-      position: absolute;
-      width: 600px; height: 600px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(201,168,76,.07) 0%, transparent 70%);
-      top: -100px; right: -100px;
-      animation: pulse 8s ease-in-out infinite;
+      position:absolute; width:700px; height:700px; border-radius:50%;
+      background:radial-gradient(circle, var(--flag-glow) 0%, transparent 70%);
+      top:-150px; right:-150px;
+      animation:pulse 8s ease-in-out infinite;
     }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.1); opacity: .7; }
-    }
-
-    .hero-content {
-      max-width: 900px;
-      position: relative;
-      z-index: 2;
-      animation: fadeUp .9s ease forwards;
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
+    @keyframes pulse { 0%,100%{transform:scale(1);opacity:1;} 50%{transform:scale(1.1);opacity:.7;} }
+    .hero-content { max-width:900px; position:relative; z-index:2; animation:fadeUp .9s ease forwards; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(30px);} to{opacity:1;transform:translateY(0);} }
     .hero-tag {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .72rem;
-      color: var(--gold);
-      letter-spacing: .2em;
-      text-transform: uppercase;
-      margin-bottom: 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: .75rem;
+      font-family:'JetBrains Mono', monospace; font-size:.72rem;
+      color:var(--primary); letter-spacing:.2em; text-transform:uppercase;
+      margin-bottom:1.5rem; display:flex; align-items:center; gap:.75rem;
     }
-    .hero-tag::before {
-      content: '';
-      display: block;
-      width: 32px; height: 1px;
-      background: var(--gold);
-    }
-
-    h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(3rem, 7vw, 6rem);
-      font-weight: 700;
-      line-height: 1.05;
-      margin-bottom: .5rem;
-    }
-
-    h1 em {
-      font-style: italic;
-      color: var(--gold);
-    }
-
-    .hero-subtitle {
-      font-size: 1.05rem;
-      color: var(--gray-light);
-      max-width: 560px;
-      margin: 1.5rem 0 2.5rem;
-      font-weight: 300;
-      line-height: 1.7;
-    }
-
-    .hero-ctas {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
+    .hero-tag::before { content:''; display:block; width:32px; height:1px; background:var(--primary); }
+    h1 { font-family:'Playfair Display', serif; font-size:clamp(3rem,7vw,6rem); font-weight:700; line-height:1.05; margin-bottom:.5rem; }
+    h1 em { font-style:italic; color:var(--primary); }
+    .hero-subtitle { font-size:1.05rem; color:var(--gray-light); max-width:560px; margin:1.5rem 0 2.5rem; font-weight:300; line-height:1.7; }
+    .hero-ctas { display:flex; gap:1rem; flex-wrap:wrap; }
     .btn-primary {
-      display: inline-block;
-      padding: .75rem 2rem;
-      background: var(--gold);
-      color: var(--bg);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .75rem;
-      font-weight: 500;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: background .2s, transform .2s;
+      display:inline-block; padding:.75rem 2rem;
+      background:var(--primary); color:var(--bg);
+      font-family:'JetBrains Mono', monospace; font-size:.75rem; font-weight:500;
+      letter-spacing:.1em; text-transform:uppercase; text-decoration:none;
+      transition:background .2s, transform .2s;
     }
-    .btn-primary:hover { background: var(--gold-bright); transform: translateY(-2px); }
-
+    .btn-primary:hover { background:var(--primary-bright); transform:translateY(-2px); }
     .btn-outline {
-      display: inline-block;
-      padding: .75rem 2rem;
-      border: 1px solid var(--gold-dim);
-      color: var(--gold);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .75rem;
-      font-weight: 500;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: border-color .2s, color .2s, transform .2s;
+      display:inline-block; padding:.75rem 2rem;
+      border:1px solid var(--primary-dim); color:var(--primary);
+      font-family:'JetBrains Mono', monospace; font-size:.75rem; font-weight:500;
+      letter-spacing:.1em; text-transform:uppercase; text-decoration:none;
+      transition:all .2s;
     }
-    .btn-outline:hover { border-color: var(--gold); color: var(--gold-bright); transform: translateY(-2px); }
+    .btn-outline:hover { border-color:var(--primary); color:var(--primary-bright); transform:translateY(-2px); }
 
-    /* ── STATS STRIP ── */
+    /* ════════════════════════════════════
+       STATS STRIP
+    ════════════════════════════════════ */
     .stats-strip {
-      background: var(--bg3);
-      border-top: 1px solid var(--border-subtle);
-      border-bottom: 1px solid var(--border-subtle);
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      padding: 0;
+      background:var(--bg3); border-top:1px solid var(--border-subtle);
+      border-bottom:1px solid var(--border-subtle);
+      display:grid; grid-template-columns:repeat(4,1fr);
     }
+    .stat-item { padding:2rem 2.5rem; border-right:1px solid var(--border-subtle); }
+    .stat-item:last-child { border-right:none; }
+    .stat-number { font-family:'Playfair Display', serif; font-size:2.8rem; color:var(--primary); line-height:1; margin-bottom:.25rem; }
+    .stat-label { font-family:'JetBrains Mono', monospace; font-size:.68rem; color:var(--gray); letter-spacing:.1em; text-transform:uppercase; }
 
-    .stat-item {
-      padding: 2rem 2.5rem;
-      border-right: 1px solid var(--border-subtle);
-      animation: fadeUp .7s ease forwards;
-    }
-    .stat-item:last-child { border-right: none; }
+    /* ════════════════════════════════════
+       SECTION SHARED
+    ════════════════════════════════════ */
+    section { padding:6rem 3rem; }
+    .section-header { display:flex; align-items:baseline; gap:1rem; margin-bottom:3.5rem; }
+    .section-num { font-family:'JetBrains Mono', monospace; font-size:.7rem; color:var(--primary-dim); letter-spacing:.1em; }
+    h2 { font-family:'Playfair Display', serif; font-size:clamp(1.8rem,3vw,2.5rem); font-weight:700; color:var(--white); }
+    .section-line { flex:1; height:1px; background:var(--border); margin-left:.5rem; }
 
-    .stat-number {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.8rem;
-      color: var(--gold);
-      line-height: 1;
-      margin-bottom: .25rem;
-    }
-
-    .stat-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .68rem;
-      color: var(--gray);
-      letter-spacing: .1em;
-      text-transform: uppercase;
-    }
-
-    /* ── SECTION SHARED ── */
-    section {
-      padding: 6rem 3rem;
-    }
-
-    .section-header {
-      display: flex;
-      align-items: baseline;
-      gap: 1rem;
-      margin-bottom: 3.5rem;
-    }
-
-    .section-num {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .7rem;
-      color: var(--gold-dim);
-      letter-spacing: .1em;
-    }
-
-    h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.8rem, 3vw, 2.5rem);
-      font-weight: 700;
-      color: var(--white);
-    }
-
-    .section-line {
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-      margin-left: .5rem;
-    }
-
-    /* ── ABOUT ── */
-    #about {
-      background: var(--bg2);
-    }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5rem;
-      align-items: start;
-    }
-
-    .about-text p {
-      color: var(--gray-light);
-      margin-bottom: 1.2rem;
-      font-size: .95rem;
-      line-height: 1.8;
-    }
-
-    .about-text p strong {
-      color: var(--white);
-      font-weight: 500;
-    }
-
-    .about-right {}
-
-    .tag-cloud {
-      display: flex;
-      flex-wrap: wrap;
-      gap: .6rem;
-      margin-bottom: 2.5rem;
-    }
-
+    /* ════════════════════════════════════
+       ABOUT
+    ════════════════════════════════════ */
+    #about { background:var(--bg2); }
+    .about-grid { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:start; }
+    .about-text p { color:var(--gray-light); margin-bottom:1.2rem; font-size:.95rem; line-height:1.8; }
+    .about-text p strong { color:var(--white); font-weight:500; }
+    .tag-cloud { display:flex; flex-wrap:wrap; gap:.6rem; margin-bottom:2.5rem; }
     .tag {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .68rem;
-      padding: .35rem .9rem;
-      border: 1px solid var(--border);
-      color: var(--gold-dim);
-      letter-spacing: .07em;
-      text-transform: uppercase;
-      transition: border-color .2s, color .2s;
+      font-family:'JetBrains Mono', monospace; font-size:.68rem;
+      padding:.35rem .9rem; border:1px solid var(--border);
+      color:var(--primary-dim); letter-spacing:.07em; text-transform:uppercase;
+      transition:all .2s; cursor:default;
     }
-    .tag:hover { border-color: var(--gold); color: var(--gold); cursor: default; }
+    .tag:hover { border-color:var(--primary); color:var(--primary); }
+    .info-list { list-style:none; }
+    .info-list li { display:flex; gap:1rem; padding:.6rem 0; border-bottom:1px solid var(--border-subtle); font-size:.88rem; }
+    .info-list li:last-child { border-bottom:none; }
+    .info-key { font-family:'JetBrains Mono', monospace; font-size:.68rem; color:var(--primary-dim); letter-spacing:.07em; text-transform:uppercase; min-width:90px; padding-top:.15rem; }
+    .info-val { color:var(--gray-light); }
 
-    .info-list {
-      list-style: none;
+    /* ════════════════════════════════════
+       LIFE NARRATIVE
+    ════════════════════════════════════ */
+    #narrative { background:var(--bg); position:relative; overflow:hidden; }
+    .narrative-bg {
+      position:absolute; inset:0; pointer-events:none;
+      background: radial-gradient(ellipse 60% 40% at 80% 20%, var(--flag-glow) 0%, transparent 60%),
+                  radial-gradient(ellipse 40% 40% at 10% 80%, var(--flag-glow) 0%, transparent 60%);
     }
-    .info-list li {
-      display: flex;
-      gap: 1rem;
-      padding: .6rem 0;
-      border-bottom: 1px solid var(--border-subtle);
-      font-size: .88rem;
+    .narrative-body {
+      display:grid; grid-template-columns:1fr 2fr; gap:5rem; align-items:start;
     }
-    .info-list li:last-child { border-bottom: none; }
-    .info-key {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .68rem;
-      color: var(--gold-dim);
-      letter-spacing: .07em;
-      text-transform: uppercase;
-      min-width: 90px;
-      padding-top: .15rem;
+    .narrative-timeline { position:sticky; top:7rem; }
+    .timeline-item {
+      display:flex; gap:1rem; margin-bottom:1.2rem;
+      cursor:pointer; opacity:.5; transition:opacity .3s;
     }
-    .info-val { color: var(--gray-light); }
+    .timeline-item.active { opacity:1; }
+    .timeline-dot {
+      width:8px; height:8px; border-radius:50%;
+      background:var(--primary-dim); margin-top:.35rem; flex-shrink:0;
+      transition:background .3s, transform .3s;
+    }
+    .timeline-item.active .timeline-dot { background:var(--primary); transform:scale(1.4); }
+    .timeline-year { font-family:'JetBrains Mono', monospace; font-size:.68rem; color:var(--primary-dim); letter-spacing:.1em; min-width:38px; }
+    .timeline-label { font-size:.82rem; color:var(--gray); line-height:1.4; }
+    .timeline-item.active .timeline-label { color:var(--gray-light); }
 
-    /* ── EDUCATION ── */
-    #education {}
+    .narrative-text { position:relative; }
+    .narrative-chapter {
+      margin-bottom:3.5rem; padding-bottom:3.5rem;
+      border-bottom:1px solid var(--border-subtle);
+    }
+    .narrative-chapter:last-child { border-bottom:none; }
+    .chapter-year {
+      font-family:'JetBrains Mono', monospace; font-size:.68rem;
+      color:var(--primary); letter-spacing:.2em; text-transform:uppercase;
+      margin-bottom:1rem; display:flex; align-items:center; gap:.75rem;
+    }
+    .chapter-year::before { content:''; display:block; width:24px; height:1px; background:var(--primary); }
+    .chapter-title {
+      font-family:'Playfair Display', serif; font-size:1.5rem;
+      font-weight:700; margin-bottom:1.25rem; color:var(--white);
+    }
+    .chapter-text { font-size:.95rem; color:var(--gray-light); line-height:1.9; margin-bottom:1rem; }
+    .chapter-text strong { color:var(--white); font-weight:500; }
+    .chapter-text em { color:var(--primary); font-style:italic; }
+    .pull-quote {
+      margin:2rem 0; padding:1.5rem 2rem;
+      border-left:3px solid var(--primary);
+      background:var(--bg2);
+    }
+    .pull-quote p {
+      font-family:'Libre Baskerville', serif; font-size:1.05rem;
+      font-style:italic; color:var(--gray-light); line-height:1.7;
+    }
 
+    /* ════════════════════════════════════
+       EDUCATION
+    ════════════════════════════════════ */
     .edu-card {
-      background: var(--bg2);
-      border: 1px solid var(--border-subtle);
-      padding: 2rem 2.5rem;
-      margin-bottom: 1.5rem;
-      position: relative;
-      transition: border-color .2s;
+      background:var(--bg2); border:1px solid var(--border-subtle);
+      padding:2rem 2.5rem; margin-bottom:1.5rem; position:relative; transition:border-color .2s;
     }
-    .edu-card:hover { border-color: var(--border); }
+    .edu-card:hover { border-color:var(--border); }
     .edu-card::before {
-      content: '';
-      position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: 3px;
-      background: var(--gold-dim);
-      transition: background .2s;
+      content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+      background:var(--primary-dim); transition:background .2s;
     }
-    .edu-card:hover::before { background: var(--gold); }
-
-    .edu-school {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.2rem;
-      margin-bottom: .3rem;
-    }
-    .edu-period {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .68rem;
-      color: var(--gold);
-      letter-spacing: .1em;
-      margin-bottom: .8rem;
-    }
-    .edu-detail {
-      font-size: .88rem;
-      color: var(--gray-light);
-      line-height: 1.7;
-    }
+    .edu-card:hover::before { background:var(--primary); }
+    .edu-school { font-family:'Playfair Display', serif; font-size:1.2rem; margin-bottom:.3rem; }
+    .edu-period { font-family:'JetBrains Mono', monospace; font-size:.68rem; color:var(--primary); letter-spacing:.1em; margin-bottom:.8rem; }
+    .edu-detail { font-size:.88rem; color:var(--gray-light); line-height:1.7; }
     .edu-badge {
-      display: inline-block;
-      background: rgba(201,168,76,.1);
-      border: 1px solid var(--border);
-      padding: .2rem .65rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .62rem;
-      color: var(--gold-dim);
-      letter-spacing: .07em;
-      text-transform: uppercase;
-      margin-right: .4rem;
-      margin-top: .5rem;
+      display:inline-block; background:rgba(201,168,76,.1); border:1px solid var(--border);
+      padding:.2rem .65rem; font-family:'JetBrains Mono', monospace; font-size:.62rem;
+      color:var(--primary-dim); letter-spacing:.07em; text-transform:uppercase;
+      margin-right:.4rem; margin-top:.5rem;
     }
+    [data-theme="pt"] .edu-badge { background:rgba(245,196,0,.08); }
 
-    /* ── EXPERIENCES ── */
-    #experience {
-      background: var(--bg2);
-    }
-
-    .exp-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-    }
-
+    /* ════════════════════════════════════
+       EXPERIENCE
+    ════════════════════════════════════ */
+    #experience { background:var(--bg2); }
+    .exp-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
     .exp-card {
-      background: var(--bg3);
-      border: 1px solid var(--border-subtle);
-      padding: 1.75rem 2rem;
-      transition: border-color .2s, transform .2s;
+      background:var(--bg3); border:1px solid var(--border-subtle);
+      padding:1.75rem 2rem; transition:border-color .2s, transform .2s;
     }
-    .exp-card:hover { border-color: var(--border); transform: translateY(-3px); }
+    .exp-card:hover { border-color:var(--border); transform:translateY(-3px); }
+    .exp-type { font-family:'JetBrains Mono', monospace; font-size:.62rem; color:var(--primary-dim); letter-spacing:.12em; text-transform:uppercase; margin-bottom:.6rem; }
+    .exp-title { font-family:'Playfair Display', serif; font-size:1.05rem; margin-bottom:.4rem; }
+    .exp-org { font-family:'JetBrains Mono', monospace; font-size:.72rem; color:var(--primary); margin-bottom:.75rem; }
+    .exp-desc { font-size:.85rem; color:var(--gray); line-height:1.65; }
 
-    .exp-type {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .62rem;
-      color: var(--gold-dim);
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      margin-bottom: .6rem;
-    }
-
-    .exp-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.05rem;
-      margin-bottom: .4rem;
-    }
-
-    .exp-org {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .72rem;
-      color: var(--gold);
-      margin-bottom: .75rem;
-    }
-
-    .exp-desc {
-      font-size: .85rem;
-      color: var(--gray);
-      line-height: 1.65;
-    }
-
-    /* ── AWARDS ── */
-    #awards {}
-
-    .awards-columns {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 2rem;
-    }
-
+    /* ════════════════════════════════════
+       AWARDS
+    ════════════════════════════════════ */
+    .awards-columns { display:grid; grid-template-columns:1fr 1fr 1fr; gap:2rem; }
     .award-group h3 {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .7rem;
-      color: var(--gold-dim);
-      letter-spacing: .15em;
-      text-transform: uppercase;
-      margin-bottom: 1.25rem;
-      padding-bottom: .75rem;
-      border-bottom: 1px solid var(--border);
+      font-family:'JetBrains Mono', monospace; font-size:.7rem; color:var(--primary-dim);
+      letter-spacing:.15em; text-transform:uppercase; margin-bottom:1.25rem;
+      padding-bottom:.75rem; border-bottom:1px solid var(--border);
     }
+    .award-item { display:flex; gap:1rem; margin-bottom:.9rem; align-items:flex-start; }
+    .award-year { font-family:'JetBrains Mono', monospace; font-size:.65rem; color:var(--primary-dim); min-width:36px; padding-top:.1rem; }
+    .award-name { font-size:.88rem; color:var(--gray-light); line-height:1.45; }
+    .award-name strong { color:var(--white); font-weight:500; }
 
-    .award-item {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: .9rem;
-      align-items: flex-start;
-    }
-
-    .award-year {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .65rem;
-      color: var(--gold-dim);
-      min-width: 36px;
-      padding-top: .1rem;
-    }
-
-    .award-name {
-      font-size: .88rem;
-      color: var(--gray-light);
-      line-height: 1.45;
-    }
-
-    .award-name strong {
-      color: var(--white);
-      font-weight: 500;
-    }
-
-    /* ── BEYOND ── */
-    #beyond {
-      background: var(--bg2);
-    }
-
-    .beyond-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-    }
-
+    /* ════════════════════════════════════
+       BEYOND
+    ════════════════════════════════════ */
+    #beyond { background:var(--bg2); }
+    .beyond-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; }
     .beyond-card {
-      background: var(--bg3);
-      border: 1px solid var(--border-subtle);
-      padding: 2rem;
-      transition: border-color .2s;
+      background:var(--bg3); border:1px solid var(--border-subtle);
+      padding:2rem; transition:border-color .2s;
     }
-    .beyond-card:hover { border-color: var(--border); }
+    .beyond-card:hover { border-color:var(--border); }
+    .beyond-icon { font-size:1.8rem; margin-bottom:1rem; }
+    .beyond-title { font-family:'Playfair Display', serif; font-size:1.05rem; margin-bottom:.5rem; }
+    .beyond-period { font-family:'JetBrains Mono', monospace; font-size:.62rem; color:var(--primary-dim); letter-spacing:.08em; margin-bottom:.75rem; }
+    .beyond-desc { font-size:.83rem; color:var(--gray); line-height:1.6; }
 
-    .beyond-icon {
-      font-size: 1.8rem;
-      margin-bottom: 1rem;
-    }
-
-    .beyond-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.05rem;
-      margin-bottom: .5rem;
-    }
-
-    .beyond-period {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .62rem;
-      color: var(--gold-dim);
-      letter-spacing: .08em;
-      margin-bottom: .75rem;
-    }
-
-    .beyond-desc {
-      font-size: .83rem;
-      color: var(--gray);
-      line-height: 1.6;
-    }
-
-    /* ── CONTACT ── */
-    #contact {
-      text-align: center;
-      padding: 7rem 3rem;
-    }
-
-    #contact h2 {
-      font-size: clamp(2rem, 4vw, 3.5rem);
-      margin-bottom: 1rem;
-    }
-
-    .contact-sub {
-      color: var(--gray);
-      max-width: 480px;
-      margin: 0 auto 2.5rem;
-      font-size: .95rem;
-    }
-
-    .contact-links {
-      display: flex;
-      gap: 1.5rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
+    /* ════════════════════════════════════
+       CONTACT & FOOTER
+    ════════════════════════════════════ */
+    #contact { text-align:center; padding:7rem 3rem; }
+    #contact h2 { font-size:clamp(2rem,4vw,3.5rem); margin-bottom:1rem; }
+    .contact-sub { color:var(--gray); max-width:480px; margin:0 auto 2.5rem; font-size:.95rem; }
+    .contact-links { display:flex; gap:1.5rem; justify-content:center; flex-wrap:wrap; }
     .contact-link {
-      display: flex;
-      align-items: center;
-      gap: .5rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .75rem;
-      color: var(--gray);
-      text-decoration: none;
-      letter-spacing: .07em;
-      transition: color .2s;
+      display:flex; align-items:center; gap:.5rem;
+      font-family:'JetBrains Mono', monospace; font-size:.75rem;
+      color:var(--gray); text-decoration:none; letter-spacing:.07em; transition:color .2s;
     }
-    .contact-link:hover { color: var(--gold); }
-    .contact-link .dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--gold-dim);
-    }
-
-    /* ── FOOTER ── */
+    .contact-link:hover { color:var(--primary); }
+    .contact-link .dot { width:6px; height:6px; border-radius:50%; background:var(--primary-dim); }
     footer {
-      padding: 1.5rem 3rem;
-      border-top: 1px solid var(--border-subtle);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      padding:1.5rem 3rem; border-top:1px solid var(--border-subtle);
+      display:flex; align-items:center; justify-content:space-between;
     }
+    .footer-note { font-family:'JetBrains Mono', monospace; font-size:.65rem; color:var(--gray); letter-spacing:.07em; }
 
-    .footer-note {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .65rem;
-      color: var(--gray);
-      letter-spacing: .07em;
+    /* ════════════════════════════════════
+       SCROLL REVEAL
+    ════════════════════════════════════ */
+    .reveal { opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity:1; transform:none; }
+
+    /* ════════════════════════════════════
+       SCROLLBAR
+    ════════════════════════════════════ */
+    ::-webkit-scrollbar { width:4px; }
+    ::-webkit-scrollbar-track { background:var(--bg); }
+    ::-webkit-scrollbar-thumb { background:var(--primary-dim); border-radius:2px; }
+
+    /* ════════════════════════════════════
+       RESPONSIVE
+    ════════════════════════════════════ */
+    @media(max-width:900px){
+      nav{padding:1.25rem 1.5rem;}
+      .nav-links{gap:1rem;}
+      section{padding:4rem 1.5rem;}
+      #hero{padding:7rem 1.5rem 4rem;}
+      .about-grid,.narrative-body{grid-template-columns:1fr;gap:2.5rem;}
+      .narrative-timeline{position:static;}
+      .exp-grid{grid-template-columns:1fr;}
+      .awards-columns{grid-template-columns:1fr 1fr;}
+      .beyond-grid{grid-template-columns:1fr 1fr;}
+      .stats-strip{grid-template-columns:1fr 1fr;}
+      .stat-item:nth-child(2){border-right:none;}
+      footer{flex-direction:column;gap:.5rem;text-align:center;}
+      .selector-buttons{flex-direction:column;align-items:center;}
     }
-
-    /* ── SCROLLBAR ── */
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 2px; }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 900px) {
-      nav { padding: 1.25rem 1.5rem; }
-      .nav-links { gap: 1.5rem; }
-      section { padding: 4rem 1.5rem; }
-      #hero { padding: 7rem 1.5rem 4rem; }
-      .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-      .exp-grid { grid-template-columns: 1fr; }
-      .awards-columns { grid-template-columns: 1fr 1fr; }
-      .beyond-grid { grid-template-columns: 1fr 1fr; }
-      .stats-strip { grid-template-columns: 1fr 1fr; }
-      .stat-item:nth-child(2) { border-right: none; }
-      footer { flex-direction: column; gap: .5rem; text-align: center; }
-    }
-
-    @media (max-width: 600px) {
-      .nav-links { display: none; }
-      h1 { font-size: 2.8rem; }
-      .awards-columns { grid-template-columns: 1fr; }
-      .beyond-grid { grid-template-columns: 1fr; }
-      .stats-strip { grid-template-columns: 1fr 1fr; }
-    }
-
-    /* scroll-reveal */
-    .reveal {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity .7s ease, transform .7s ease;
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: none;
+    @media(max-width:600px){
+      .nav-links{display:none;}
+      h1{font-size:2.8rem;}
+      .awards-columns{grid-template-columns:1fr;}
+      .beyond-grid{grid-template-columns:1fr;}
     }
   </style>
 </head>
 <body>
 
+<!-- ══════════════════════════════════════
+     LANGUAGE SELECTOR
+══════════════════════════════════════ -->
+<div id="lang-selector">
+  <div class="selector-grid-bg"></div>
+  <div class="selector-heading">
+    <div class="name">Giordano <em>Piwowarczyk</em> Araujo</div>
+    <div class="prompt">Choose your language &nbsp;/&nbsp; Escolha seu idioma</div>
+  </div>
+  <div class="selector-buttons">
+
+    <!-- BRAZIL BUTTON -->
+    <button class="lang-btn brazil" onclick="selectLang('pt')">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:.75rem;position:relative;z-index:2;">
+        <div class="brazil-diamond">
+          <div class="brazil-circle">
+            <div class="brazil-stars"></div>
+          </div>
+        </div>
+        <div class="lang-label-pt">Português</div>
+        <div class="lang-sublabel-pt">Versão Brasileira</div>
+      </div>
+    </button>
+
+    <!-- USA BUTTON -->
+    <button class="lang-btn usa" onclick="selectLang('en')">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:.75rem;position:relative;z-index:2;">
+        <div class="usa-flag-icon">
+          <div class="usa-stripes"></div>
+          <div class="usa-canton"></div>
+        </div>
+        <div class="lang-label-en">English</div>
+        <div class="lang-sublabel-en">English Version</div>
+      </div>
+    </button>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     MAIN SITE
+══════════════════════════════════════ -->
+<div id="main-site">
+
 <!-- NAV -->
 <nav>
   <a class="nav-logo" href="#hero">G.P.A</a>
   <ul class="nav-links">
-    <li><a href="#about">About</a></li>
-    <li><a href="#education">Education</a></li>
-    <li><a href="#experience">Experience</a></li>
-    <li><a href="#awards">Awards</a></li>
-    <li><a href="#beyond">Beyond</a></li>
-    <li><a href="#contact">Contact</a></li>
+    <li><a href="#about" data-en="About" data-pt="Sobre">About</a></li>
+    <li><a href="#narrative" data-en="Story" data-pt="Trajetória">Story</a></li>
+    <li><a href="#education" data-en="Education" data-pt="Formação">Education</a></li>
+    <li><a href="#experience" data-en="Experience" data-pt="Experiência">Experience</a></li>
+    <li><a href="#awards" data-en="Awards" data-pt="Prêmios">Awards</a></li>
+    <li><a href="#beyond" data-en="Beyond" data-pt="Além">Beyond</a></li>
+    <li><a href="#contact" data-en="Contact" data-pt="Contato">Contact</a></li>
+    <li><button class="lang-toggle-btn" id="nav-lang-btn" onclick="toggleLang()">PT-BR</button></li>
   </ul>
 </nav>
 
-<!-- HERO -->
+<!-- ══ HERO ══ -->
 <section id="hero">
   <div class="hero-grid-bg"></div>
   <div class="hero-glow"></div>
   <div class="hero-content">
-    <div class="hero-tag">São Paulo → Lafayette College</div>
+    <div class="hero-tag" data-en="São Paulo → Lafayette College" data-pt="São Paulo → Lafayette College">São Paulo → Lafayette College</div>
     <h1>Giordano<br><em>Piwowarczyk</em><br>Araujo</h1>
-    <p class="hero-subtitle">
-      Physics &amp; Computer Science student. Educator, builder, and curious mind at the intersection of technology and community. Incoming Class of 2030 at Lafayette College.
+    <p class="hero-subtitle"
+       data-en="Electrical &amp; Computer Engineering student. Educator, builder, and curious mind at the intersection of technology and community. Incoming Class of 2030 at Lafayette College."
+       data-pt="Estudante de Engenharia Elétrica e de Computação. Educador, construtor e mente curiosa na interseção de tecnologia e comunidade. Turma 2030 no Lafayette College.">
+      Electrical &amp; Computer Engineering student. Educator, builder, and curious mind at the intersection of technology and community. Incoming Class of 2030 at Lafayette College.
     </p>
     <div class="hero-ctas">
-      <a href="#experience" class="btn-primary">Explore My Work</a>
-      <a href="#contact" class="btn-outline">Get in Touch</a>
+      <a href="#narrative" class="btn-primary" data-en="My Story" data-pt="Minha Trajetória">My Story</a>
+      <a href="#contact" class="btn-outline" data-en="Get in Touch" data-pt="Entre em Contato">Get in Touch</a>
     </div>
   </div>
 </section>
 
-<!-- STATS STRIP -->
+<!-- ══ STATS ══ -->
 <div class="stats-strip">
   <div class="stat-item reveal">
     <div class="stat-number">40+</div>
-    <div class="stat-label">Students taught via Code Kids</div>
+    <div class="stat-label" data-en="Students taught via Code Kids" data-pt="Alunos ensinados no Code Kids">Students taught via Code Kids</div>
   </div>
   <div class="stat-item reveal">
     <div class="stat-number">3×</div>
-    <div class="stat-label">Duke of Edinburgh (Bronze–Gold)</div>
+    <div class="stat-label" data-en="Duke of Edinburgh (Bronze–Gold)" data-pt="Duke of Edinburgh (Bronze–Ouro)">Duke of Edinburgh (Bronze–Gold)</div>
   </div>
   <div class="stat-item reveal">
     <div class="stat-number">1st</div>
-    <div class="stat-label">Intelli Camp · 100+ participants</div>
+    <div class="stat-label" data-en="Intelli Camp · 100+ participants" data-pt="Intelli Camp · 100+ participantes">Intelli Camp · 100+ participants</div>
   </div>
   <div class="stat-item reveal">
-    <div class="stat-number">IB</div>
-    <div class="stat-label">HL Physics · CS · Maths</div>
+    <div class="stat-number">90%</div>
+    <div class="stat-label" data-en="Merit scholarship · Lafayette" data-pt="Bolsa por mérito · Lafayette">Merit scholarship · Lafayette</div>
   </div>
 </div>
 
-<!-- ABOUT -->
+<!-- ══ ABOUT ══ -->
 <section id="about">
   <div class="section-header reveal">
     <span class="section-num">01</span>
-    <h2>About</h2>
+    <h2 data-en="About" data-pt="Sobre Mim">About</h2>
     <div class="section-line"></div>
   </div>
   <div class="about-grid">
     <div class="about-text reveal">
-      <p>
-        I'm a Brazilian-Polish student from São Paulo, currently completing the <strong>IB Diploma</strong> at St. Paul's School with Higher Level subjects in Physics, Computer Science, and Mathematics. I will be joining <strong>Lafayette College</strong> in the United States, having been accepted through Early Decision.
+      <!-- EN paragraphs -->
+      <p class="lang-en">
+        I'm a Brazilian-Polish student from São Paulo, completing the <strong>IB Diploma</strong> at St. Paul's School — one of Brazil's leading British international schools — with Higher Level subjects in Physics, Computer Science, and Mathematics. I will join <strong>Lafayette College</strong> in the United States as a member of the Class of 2030, studying Electrical and Computer Engineering.
       </p>
-      <p>
-        My intellectual interests sit at the junction of <strong>physics, computing, and education</strong>. I've explored everything from the luminous efficacy of LEDs for my Extended Essay, to building mathematical models of rowing boat motion using higher derivatives and real Championship data.
+      <p class="lang-en">
+        My intellectual interests sit at the junction of <strong>physics, computing, and education</strong>. I've explored the luminous efficacy of LEDs for my Extended Essay, built mathematical models of rowing boat motion using higher derivatives and real Championship data, and developed complete software systems for real clients.
       </p>
-      <p>
-        Beyond the classroom, I believe technology is most powerful when it's shared. I've led Code Kids — a community program teaching Python to students in a state school in Vila Madalena — since 2022, and have taught programming across multiple initiatives including JuntosNaTech and an AI &amp; Machine Learning enrichment course.
+      <p class="lang-en">
+        I believe technology is most powerful when it's shared. I've led Code Kids — a community programme teaching Python to students in a state school in Vila Madalena — since 2022. I also teach programming at my school as Digital Ambassador and co-created an AI &amp; Machine Learning enrichment course.
       </p>
-      <p>
-        Outside of tech and science, I'm a competitive rower, a choir singer, and a Kung Fu practitioner — disciplines that have each taught me something about <strong>precision, patience, and the pursuit of mastery</strong>.
+      <p class="lang-en">
+        Outside tech and science, I'm a competitive rower, a choir singer, and a Kung Fu practitioner. Each discipline has taught me something different about <strong>precision, patience, and the pursuit of mastery</strong>.
+      </p>
+      <!-- PT paragraphs -->
+      <p class="lang-pt" style="display:none;">
+        Sou um estudante brasileiro-polonês de São Paulo, cursando o <strong>Diploma do IB</strong> na St. Paul's School — uma das principais escolas britânicas internacionais do Brasil — com disciplinas de Nível Superior em Física, Ciências da Computação e Matemática. Ingressarei no <strong>Lafayette College</strong> nos Estados Unidos como membro da Turma de 2030, estudando Engenharia Elétrica e de Computação.
+      </p>
+      <p class="lang-pt" style="display:none;">
+        Meus interesses intelectuais estão na interseção de <strong>física, computação e educação</strong>. Explorei a eficácia luminosa de LEDs na minha Monografia do IB, construí modelos matemáticos do movimento de barcos a remo usando derivadas de ordem superior e dados reais do Campeonato Mundial, e desenvolvi sistemas de software completos para clientes reais.
+      </p>
+      <p class="lang-pt" style="display:none;">
+        Acredito que a tecnologia é mais poderosa quando compartilhada. Lidero o Projeto Code Kids — uma iniciativa comunitária que ensina Python a alunos de uma escola estadual em Vila Madalena — desde 2022. Também ensino programação na minha escola como Embaixador Digital e criei junto a um colega um curso de IA e Machine Learning.
+      </p>
+      <p class="lang-pt" style="display:none;">
+        Fora da tecnologia e das ciências, sou remador competitivo, cantor no coral escolar e praticante de Kung Fu. Cada disciplina me ensinou algo diferente sobre <strong>precisão, paciência e a busca pela excelência</strong>.
       </p>
     </div>
     <div class="about-right reveal">
       <div class="tag-cloud">
-        <span class="tag">Physics</span>
-        <span class="tag">Computer Science</span>
-        <span class="tag">Mathematics</span>
-        <span class="tag">Machine Learning</span>
-        <span class="tag">Python</span>
-        <span class="tag">Java</span>
-        <span class="tag">Education</span>
-        <span class="tag">Community</span>
-        <span class="tag">Rowing</span>
-        <span class="tag">Quantum Computing</span>
-        <span class="tag">AI</span>
-        <span class="tag">Leadership</span>
+        <span class="tag">Physics</span><span class="tag">Computer Science</span>
+        <span class="tag">Mathematics</span><span class="tag">Machine Learning</span>
+        <span class="tag">Python</span><span class="tag">Java</span>
+        <span class="tag">SQL</span><span class="tag">Education</span>
+        <span class="tag">Community</span><span class="tag">Rowing</span>
+        <span class="tag">AI</span><span class="tag">Leadership</span>
       </div>
       <ul class="info-list">
-        <li><span class="info-key">Location</span><span class="info-val">São Paulo, Brazil</span></li>
-        <li><span class="info-key">University</span><span class="info-val">Lafayette College, Class of 2030</span></li>
-        <li><span class="info-key">School</span><span class="info-val">St. Paul's School — IB Diploma</span></li>
-        <li><span class="info-key">Languages</span><span class="info-val">Portuguese (native), English (fluent), Spanish</span></li>
-        <li><span class="info-key">Email</span><span class="info-val">giordanoparaujo2@gmail.com</span></li>
-        <li><span class="info-key">Domain</span><span class="info-val">thegiordano.tech</span></li>
+        <li>
+          <span class="info-key" data-en="Location" data-pt="Localização">Location</span>
+          <span class="info-val">São Paulo, Brazil</span>
+        </li>
+        <li>
+          <span class="info-key" data-en="University" data-pt="Universidade">University</span>
+          <span class="info-val" data-en="Lafayette College, Class of 2030" data-pt="Lafayette College, Turma de 2030">Lafayette College, Class of 2030</span>
+        </li>
+        <li>
+          <span class="info-key" data-en="School" data-pt="Escola">School</span>
+          <span class="info-val" data-en="St. Paul's School — IB Diploma" data-pt="St. Paul's School — Diploma IB">St. Paul's School — IB Diploma</span>
+        </li>
+        <li>
+          <span class="info-key" data-en="Languages" data-pt="Idiomas">Languages</span>
+          <span class="info-val" data-en="Portuguese (native) · English (fluent) · Spanish" data-pt="Português (nativo) · Inglês (fluente) · Espanhol">Portuguese (native) · English (fluent) · Spanish</span>
+        </li>
+        <li>
+          <span class="info-key">Email</span>
+          <span class="info-val">giordanoparaujo2@gmail.com</span>
+        </li>
+        <li>
+          <span class="info-key" data-en="Website" data-pt="Site">Website</span>
+          <span class="info-val">thegiordano.tech</span>
+        </li>
       </ul>
     </div>
   </div>
 </section>
 
-<!-- EDUCATION -->
-<section id="education">
+<!-- ══ LIFE NARRATIVE ══ -->
+<section id="narrative">
+  <div class="narrative-bg"></div>
   <div class="section-header reveal">
     <span class="section-num">02</span>
-    <h2>Education</h2>
+    <h2 data-en="The Story So Far" data-pt="A Trajetória">The Story So Far</h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="narrative-body">
+    <!-- Timeline sidebar -->
+    <div class="narrative-timeline reveal">
+      <div class="timeline-item active" data-chapter="ch1">
+        <div class="timeline-dot"></div>
+        <div>
+          <div class="timeline-year">—2016</div>
+          <div class="timeline-label lang-en">The Public School Years</div>
+          <div class="timeline-label lang-pt" style="display:none;">Os Anos na Escola Pública</div>
+        </div>
+      </div>
+      <div class="timeline-item" data-chapter="ch2">
+        <div class="timeline-dot"></div>
+        <div>
+          <div class="timeline-year">2017</div>
+          <div class="timeline-label lang-en">First Scholarship</div>
+          <div class="timeline-label lang-pt" style="display:none;">Primeira Bolsa</div>
+        </div>
+      </div>
+      <div class="timeline-item" data-chapter="ch3">
+        <div class="timeline-dot"></div>
+        <div>
+          <div class="timeline-year">2019–21</div>
+          <div class="timeline-label lang-en">Olympic Medals</div>
+          <div class="timeline-label lang-pt" style="display:none;">Medalhas Olímpicas</div>
+        </div>
+      </div>
+      <div class="timeline-item" data-chapter="ch4">
+        <div class="timeline-dot"></div>
+        <div>
+          <div class="timeline-year">2022</div>
+          <div class="timeline-label lang-en">St. Paul's & Code Kids</div>
+          <div class="timeline-label lang-pt" style="display:none;">St. Paul's e Code Kids</div>
+        </div>
+      </div>
+      <div class="timeline-item" data-chapter="ch5">
+        <div class="timeline-dot"></div>
+        <div>
+          <div class="timeline-year">2023–24</div>
+          <div class="timeline-label lang-en">Building & Competing</div>
+          <div class="timeline-label lang-pt" style="display:none;">Construindo e Competindo</div>
+        </div>
+      </div>
+      <div class="timeline-item" data-chapter="ch6">
+        <div class="timeline-dot"></div>
+        <div>
+          <div class="timeline-year">2025</div>
+          <div class="timeline-label lang-en">Convergence</div>
+          <div class="timeline-label lang-pt" style="display:none;">Convergência</div>
+        </div>
+      </div>
+      <div class="timeline-item" data-chapter="ch7">
+        <div class="timeline-dot"></div>
+        <div>
+          <div class="timeline-year">2026→</div>
+          <div class="timeline-label lang-en">What Comes Next</div>
+          <div class="timeline-label lang-pt" style="display:none;">O Que Vem a Seguir</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Narrative chapters -->
+    <div class="narrative-text reveal">
+
+      <!-- CHAPTER 1 -->
+      <div class="narrative-chapter" id="ch1">
+        <div class="chapter-year lang-en">Before 2017</div>
+        <div class="chapter-year lang-pt" style="display:none;">Antes de 2017</div>
+        <div class="chapter-title lang-en">The Public School Years</div>
+        <div class="chapter-title lang-pt" style="display:none;">Os Anos na Escola Pública</div>
+        <p class="chapter-text lang-en">
+          Growing up in São Paulo's public school system, I was a curious kid in a city that doesn't always make room for curiosity. The classrooms were crowded, the resources were limited, and the distance between my world and the world of elite education felt enormous. But São Paulo also has a quality that its public school children learn early: you figure things out.
+        </p>
+        <p class="chapter-text lang-en">
+          The turning point came when a teacher — noticing something in the way I asked questions — handed me a recommendation that would quietly alter everything: <em>try Khan Academy</em>.
+        </p>
+        <p class="chapter-text lang-en">
+          What followed was a quiet obsession. Nights spent watching videos, working through problems, pushing further than any curriculum asked. I wasn't studying to pass tests. I was studying because I couldn't stop. Astronomy. Mathematics. Physics. Each one opened a door onto another. I didn't yet know what to do with all this energy — but it was building.
+        </p>
+        <p class="chapter-text lang-pt" style="display:none;">
+          Cresci no sistema de escolas públicas de São Paulo, um garoto curioso numa cidade que nem sempre abre espaço para a curiosidade. As salas eram cheias, os recursos eram limitados, e a distância entre o meu mundo e o da educação de elite parecia enorme. Mas São Paulo também tem uma qualidade que suas crianças de escola pública aprendem cedo: você dá um jeito.
+        </p>
+        <p class="chapter-text lang-pt" style="display:none;">
+          A virada veio quando um professor — percebendo algo na forma como eu fazia perguntas — me deu uma recomendação que mudaria tudo silenciosamente: <em>experimenta o Khan Academy</em>.
+        </p>
+        <p class="chapter-text lang-pt" style="display:none;">
+          O que se seguiu foi uma obsessão tranquila. Noites assistindo vídeos, resolvendo problemas, indo além do que qualquer currículo pedia. Não estudava para passar em provas. Estudava porque não conseguia parar. Astronomia. Matemática. Física. Cada uma abria uma porta para outra. Ainda não sabia o que fazer com toda essa energia, mas ela estava se acumulando.
+        </p>
+      </div>
+
+      <!-- CHAPTER 2 -->
+      <div class="narrative-chapter" id="ch2">
+        <div class="chapter-year lang-en">2017</div>
+        <div class="chapter-year lang-pt" style="display:none;">2017</div>
+        <div class="chapter-title lang-en">The First Door</div>
+        <div class="chapter-title lang-pt" style="display:none;">A Primeira Porta</div>
+        <p class="chapter-text lang-en">
+          At the end of primary school, the energy found somewhere to go. I earned a <strong>full scholarship to Colégio Objetivo</strong> — one of São Paulo's most rigorous preparatory schools — starting in the 5th year of Ensino Fundamental. The scholarship wasn't a destination. It was a runway.
+        </p>
+        <div class="pull-quote">
+          <p class="lang-en">"The scholarship wasn't a destination. It was a runway."</p>
+          <p class="lang-pt" style="display:none;">"A bolsa não era um destino. Era uma pista de decolagem."</p>
+        </div>
+        <p class="chapter-text lang-en">
+          That same year, I won <strong>Gold at the OPF Júnior</strong> — the São Paulo State Physics Olympiad for Junior students — and received an Honour to Merit at the International Maths Kangaroo competition. The kid from the public school was beginning to belong in rooms that weren't originally built for him.
+        </p>
+        <p class="chapter-text lang-pt" style="display:none;">
+          No final do ensino fundamental, a energia encontrou um destino. Conquistei uma <strong>bolsa integral no Colégio Objetivo</strong> — um dos colégios preparatórios mais rigorosos de São Paulo — a partir do 5º ano do Ensino Fundamental. A bolsa não era um destino. Era uma pista de decolagem.
+        </p>
+        <p class="chapter-text lang-pt" style="display:none;">
+          Naquele mesmo ano, ganhei o <strong>Ouro no OPF Júnior</strong> — a Olimpíada Paulista de Física para estudantes juniores — e recebi uma Menção Honrosa no Kangaroo Internacional de Matemática. O garoto da escola pública começava a pertencer a salas que originalmente não foram construídas para ele.
+        </p>
+      </div>
+
+      <!-- CHAPTER 3 -->
+      <div class="narrative-chapter" id="ch3">
+        <div class="chapter-year lang-en">2018–2021</div>
+        <div class="chapter-year lang-pt" style="display:none;">2018–2021</div>
+        <div class="chapter-title lang-en">Building Momentum</div>
+        <div class="chapter-title lang-pt" style="display:none;">Construindo Impulso</div>
+        <p class="chapter-text lang-en">
+          The years at Colégio Objetivo were a chapter of proof. I competed in national Olympiads not because anyone asked me to, but because I wanted to know how far curiosity could carry me. The answer came in medals: <strong>Silver at OPF (2018)</strong>, <strong>back-to-back Gold at the Brazilian Astronomy Olympiad</strong> in 2019 and 2020, and a <strong>Bronze at OBQjr</strong> — the Junior Chemistry Olympiad — in 2021. Each one a statement. Each one a door held slightly more open than before.
+        </p>
+        <p class="chapter-text lang-en">
+          These weren't just academic trophies. They were a kind of self-knowledge: I could do hard things. I could enter a room full of students from elite schools and hold my own. The public school origins were not a handicap. They were, in their way, a foundation.
+        </p>
+        <p class="chapter-text lang-pt" style="display:none;">
+          Os anos no Colégio Objetivo foram um capítulo de provas. Participei de Olimpíadas nacionais não porque alguém me pediu, mas porque queria saber até onde a curiosidade poderia me levar. A resposta veio em medalhas: <strong>Prata no OPF (2018)</strong>, <strong>Ouros consecutivos na Olimpíada Brasileira de Astronomia</strong> em 2019 e 2020, e um <strong>Bronze na OBQjr</strong> — a Olimpíada Brasileira de Química Júnior — em 2021. Cada uma era uma declaração. Cada uma era uma porta aberta um pouco mais do que antes.
+        </p>
+        <p class="chapter-text lang-pt" style="display:none;">
+          Esses não eram apenas troféus acadêmicos. Eram um tipo de autoconhecimento: eu conseguia fazer coisas difíceis. Conseguia entrar numa sala cheia de alunos de escolas de elite e me sustentar. As origens na escola pública não eram uma desvantagem. Eram, à sua maneira, uma fundação.
+        </p>
+      </div>
+
+      <!-- CHAPTER 4 -->
+      <div class="narrative-chapter" id="ch4">
+        <div class="chapter-year lang-en">2022</div>
+        <div class="chapter-year lang-pt" style="display:none;">2022</div>
+        <div class="chapter-title lang-en">A New World — and an Immediate Response</div>
+        <div class="chapter-title lang-pt" style="display:none;">Um Novo Mundo — e uma Resposta Imediata</div>
+        <p class="chapter-text lang-en">
+          In 2022, a second full scholarship brought me to <strong>St. Paul's School</strong> — a British international school in São Paulo where I would complete the International Baccalaureate. A bilingual environment, a campus with labs and rowing clubs and engineering societies, students from across the world. It was, by any measure, extraordinary.
+        </p>
+        <p class="chapter-text lang-en">
+          I arrived in August. Within two months, I started <strong>Code Kids</strong>.
+        </p>
+        <p class="chapter-text lang-en">
+          I couldn't wait. I had been given so much — quality education, access, mentors, technology — and I understood, not abstractly but viscerally, what it meant to be on the outside of that. Two blocks from St. Paul's, at the EE Carlos Maximiliano Pereira dos Santos in Vila Madalena, there were children who had never written a line of code. I walked in as a volunteer instructor and never really left.
+        </p>
+        <div class="pull-quote">
+          <p class="lang-en">"Every door I've walked through, I've tried to hold open behind me."</p>
+          <p class="lang-pt" style="display:none;">"Cada porta que atravessei, tentei manter aberta para os que vieram depois."</p>
+        </div>
+        <p class="chapter-text lang-en">
+          Code Kids taught me something no IB syllabus could: that the hardest part of teaching isn't explaining a concept — it's making a child believe the concept belongs to them. When you put a keyboard in front of an eleven-year-old who has never programmed and they write their first loop, something shifts in them. I was in that room every week because I wanted to be part of that shift.
+        </p>
+        <p class="chapter-text lang-pt" style="display:none;">
+          Em 2022, uma segunda bolsa integral me trouxe para a <strong>St. Paul's School</strong> — uma escola britânica internacional em São Paulo onde cursaria o Diploma do Baccalauréat Internacional. Um ambiente bilíngue, um campus com laboratórios, clubes de remo e sociedades de engenharia, alunos de todo o mundo. Era, por qualquer medida, extraordinário.
+        </p>
+        <p class="chapter-text lang-pt" style="display:none;">
+          Cheguei em agosto. Em dois meses, fundei o <strong>Code Kids</strong>.
+        </p>
+        <p class="chapter-text lang-pt" style="display:none;">
+          Não conseguia esperar. Havia recebido tanto — educação de qualidade, acesso, mentores, tecnologia — e entendia, não de forma abstrata mas visceral, o que significava estar do lado de fora disso. A duas quadras da St. Paul's, na EE Carlos Maximiliano Pereira dos Santos em Vila Madalena, havia crianças que nunca tinham escrito uma linha de código. Entrei como professor voluntário e nunca realmente saí.
+        </p>
+        <p class="chapter-text lang-pt" style="display:none;">
+          O Code Kids me ensinou algo que nenhum currículo do IB poderia: que a parte mais difícil de ensinar não é explicar um conceito — é fazer uma criança acreditar que aquele conceito pertence a ela. Quando você coloca um teclado na frente de um menino de onze anos que nunca programou e ele escreve seu primeiro loop, algo muda nele. Estava naquela sala toda semana porque queria fazer parte dessa mudança.
+        </p>
+      </div>
+
+      <!-- CHAPTER 5 -->
+      <div class="narrative-chapter" id="ch5">
+        <div class="chapter-year lang-en">2023–2024</div>
+        <div class="chapter-year lang-pt" style="display:none;">2023–2024</div>
+        <div class="chapter-title lang-en">Competing, Building, Representing</div>
+        <div class="chapter-title lang-pt" style="display:none;">Competindo, Construindo, Representando</div>
+        <p class="chapter-text lang-en">
+          What followed at St. Paul's was a chapter of accumulation. I joined the School Council and worked directly with senior leadership on student welfare. I became <strong>Digital Ambassador</strong>, teaching weekly Python lessons to Forms 1 through 3 and preparing younger students for the Brazilian Informatics Olympiad. I became School Ambassador, guiding prospective families through a campus I had grown to love.
+        </p>
+        <p class="chapter-text lang-en">
+          In 2023, I earned a <strong>Silver Medal at the Brazilian Physics Olympiad (OBF)</strong> — a national competition, a field I had grown to love deeply. I began the three-year journey through the <strong>Duke of Edinburgh's Award</strong> (Bronze in 2023, Silver in 2024, Gold in 2025). I taught online English lessons to students at the Alessandro Zarzur Foundation through the We Teach initiative.
+        </p>
+        <p class="chapter-text lang-en">
+          In July 2024, I flew to New Haven for <strong>Yale Young Global Scholars</strong> — a two-week academic enrichment programme where I sat in graduate-level seminars and my team presented on nuclear propulsion for rockets. Back in São Paulo, I turned my three years of rowing on the river into a formal mathematical model of sculling biomechanics, analysing World Championship velocity data and publishing my findings within the school community. Physics isn't just a subject for me — it's a lens.
+        </p>
+        <p class="chapter-text lang-pt" style="display:none;">
+          O que se seguiu na St. Paul's foi um capítulo de acumulação. Ingressei no Conselho Escolar e trabalhei diretamente com a liderança sênior no bem-estar dos alunos. Tornei-me <strong>Embaixador Digital</strong>, dando aulas semanais de Python para os anos 6 ao 8 e preparando alunos mais novos para a Olimpíada Brasileira de Informática. Tornei-me Embaixador da Escola, conduzindo visitas de famílias que estavam descobrindo um campus pelo qual havia me apaixonado.
+        </p>
+        <p class="chapter-text lang-pt" style="display:none;">
+          Em 2023, conquistei a <strong>Medalha de Prata na Olimpíada Brasileira de Física (OBF)</strong> — uma competição nacional numa área que havia me conquistado. Iniciei a jornada de três anos pelo <strong>Prêmio Duke of Edinburgh</strong> (Bronze em 2023, Prata em 2024, Ouro em 2025). Dei aulas de inglês online para alunos da Fundação Alessandro Zarzur pelo We Teach.
+        </p>
+        <p class="chapter-text lang-pt" style="display:none;">
+          Em julho de 2024, viajei para New Haven para o <strong>Yale Young Global Scholars</strong> — um programa de enriquecimento acadêmico de duas semanas onde participei de seminários de nível pós-graduação, e minha equipe apresentou sobre propulsão nuclear para foguetes. De volta a São Paulo, transformei meus três anos de remo no rio em um modelo matemático formal da biomecânica do remo, analisando dados de velocidade do Campeonato Mundial. Física não é apenas uma matéria para mim. É uma lente.
+        </p>
+      </div>
+
+      <!-- CHAPTER 6 -->
+      <div class="narrative-chapter" id="ch6">
+        <div class="chapter-year lang-en">2025</div>
+        <div class="chapter-year lang-pt" style="display:none;">2025</div>
+        <div class="chapter-title lang-en">Everything Converges</div>
+        <div class="chapter-title lang-pt" style="display:none;">Tudo Converge</div>
+        <p class="chapter-text lang-en">
+          2025 was the year the threads pulled tight. I completed a week-long work shadowing at <strong>VIVO</strong> — one of Brazil's leading telecoms — immersed in infrastructure tours and executive conversations that showed me the gap between the engineering I was studying and the engineering that runs a country. I wanted to close that gap.
+        </p>
+        <p class="chapter-text lang-en">
+          In July, at <strong>Intelli Camp</strong>, I spent five days with six teammates building an automated social listening MVP integrating NLP and AI from scratch. We presented to a panel that included a major tech influencer. <strong>We won first place</strong> among twelve teams and over a hundred participants. Five days. One idea. One working product.
+        </p>
+        <p class="chapter-text lang-en">
+          Simultaneously, I was building something quieter: a complete <strong>database management system in Java and SQL</strong> for my school's Lost &amp; Found department — a real client, a real problem, a real solution. The system was demonstrated to the Digital Development Coordinator, who validated and approved it. My first professional software delivery.
+        </p>
+        <p class="chapter-text lang-en">
+          I attended <strong>HackTown 2025</strong> in Santa Rita do Sapucaí, Brazil's most advanced telco hub, learning about quantum computing startups, low-code automation tools, and the real challenges facing Brazilian SMEs trying to scale. I left with a sharper picture of what the country needs — and what I might one day be able to give it.
+        </p>
+        <p class="chapter-text lang-en">
+          That year, I also earned the <strong>Duke of Edinburgh's Gold</strong> — completing a three-year journey across Bronze, Silver, and the programme's highest level.
+        </p>
+        <p class="chapter-text lang-pt" style="display:none;">
+          2025 foi o ano em que os fios se tensionaram. Completei uma semana de observação profissional na <strong>VIVO</strong> — uma das principais telecomunicações do Brasil — imerso em visitas a centros de infraestrutura e conversas com executivos que me mostraram a distância entre a engenharia que eu estudava e a engenharia que faz um país funcionar. Queria fechar essa distância.
+        </p>
+        <p class="chapter-text lang-pt" style="display:none;">
+          Em julho, no <strong>Intelli Camp</strong>, passei cinco dias com seis colegas construindo um MVP de social listening automatizado integrando PLN e IA do zero. Apresentamos para uma banca que incluía uma grande influenciadora de tecnologia. <strong>Ganhamos o primeiro lugar</strong> entre doze equipes e mais de cem participantes. Cinco dias. Uma ideia. Um produto funcional.
+        </p>
+        <p class="chapter-text lang-pt" style="display:none;">
+          Simultaneamente, construía algo mais silencioso: um <strong>sistema completo de gerenciamento de banco de dados em Java e SQL</strong> para o setor de achados e perdidos da minha escola — um cliente real, um problema real, uma solução real. O sistema foi demonstrado ao Coordenador de Desenvolvimento Digital, que validou e aprovou. Minha primeira entrega profissional de software.
+        </p>
+        <p class="chapter-text lang-pt" style="display:none;">
+          Participei da <strong>HackTown 2025</strong> em Santa Rita do Sapucaí, o polo de telecomunicações mais avançado do Brasil, aprendendo sobre startups de computação quântica, ferramentas de automação low-code e os desafios reais das PMEs brasileiras tentando crescer. Saí com uma visão mais nítida do que o país precisa — e do que um dia poderei oferecer.
+        </p>
+        <p class="chapter-text lang-pt" style="display:none;">
+          Naquele ano, também conquistei o <strong>Ouro no Duke of Edinburgh</strong> — completando uma jornada de três anos pelo Bronze, Prata e o nível mais alto do programa.
+        </p>
+      </div>
+
+      <!-- CHAPTER 7 -->
+      <div class="narrative-chapter" id="ch7">
+        <div class="chapter-year lang-en">2026 and Beyond</div>
+        <div class="chapter-year lang-pt" style="display:none;">2026 e Além</div>
+        <div class="chapter-title lang-en">What Comes Next</div>
+        <div class="chapter-title lang-pt" style="display:none;">O Que Vem a Seguir</div>
+        <p class="chapter-text lang-en">
+          In late 2024, I applied Early Decision to <strong>Lafayette College</strong> in the United States, to study Electrical and Computer Engineering. I was accepted — with approximately <em>90% of tuition covered by merit scholarship</em>.
+        </p>
+        <p class="chapter-text lang-en">
+          I am the first in my family to study abroad. I am the product of public school classrooms, a teacher who pointed me toward the internet, and a sequence of generous scholarships that opened doors I could not have opened alone. Everything I've done — Code Kids, the Olympiad medals, the software systems, the five-day MVP sprint — has been an attempt to understand what I'm capable of, and to share what I find.
+        </p>
+        <div class="pull-quote">
+          <p class="lang-en">"Why does Brazil produce so many talented people who have to leave to be fulfilled? I want to be part of the answer — not just as someone who returns with an international education, but as someone who uses that education to create infrastructure, opportunity, and reference here."</p>
+          <p class="lang-pt" style="display:none;">"Por que o Brasil forma tantos talentos que precisam ir embora para se realizar? Quero ser parte da resposta — não apenas como alguém que retorna com formação internacional, mas como alguém que usa essa formação para criar infraestrutura, oportunidade e referência aqui dentro."</p>
+        </div>
+        <p class="chapter-text lang-en">
+          My plan is to study deeply, build constantly, and return to Brazil with the tools to lead a company that develops engineering solutions with real social impact — and that opens doors for the next generation of technology leaders.
+        </p>
+        <p class="chapter-text lang-en">
+          The story isn't finished. Lafayette is the next chapter. Brazil is where it ends.
+        </p>
+        <p class="chapter-text lang-pt" style="display:none;">
+          No final de 2024, apliquei via Early Decision para o <strong>Lafayette College</strong> nos Estados Unidos, para cursar Engenharia Elétrica e de Computação. Fui aceito — com aproximadamente <em>90% da mensalidade coberta por bolsa por mérito</em>.
+        </p>
+        <p class="chapter-text lang-pt" style="display:none;">
+          Sou o primeiro da minha família a estudar no exterior. Sou produto de salas de escola pública, de um professor que me apontou para a internet, e de uma sequência de bolsas generosas que abriram portas que eu não poderia ter aberto sozinho. Tudo que fiz — Code Kids, as medalhas em olimpíadas, os sistemas de software, o sprint de MVP em cinco dias — foi uma tentativa de entender do que sou capaz, e de compartilhar o que encontro.
+        </p>
+        <p class="chapter-text lang-pt" style="display:none;">
+          Meu plano é estudar profundamente, construir constantemente, e retornar ao Brasil com as ferramentas para liderar uma empresa que desenvolva soluções de engenharia com impacto social real — e que abra portas para a próxima geração de líderes em tecnologia.
+        </p>
+        <p class="chapter-text lang-pt" style="display:none;">
+          A história não acabou. Lafayette é o próximo capítulo. O Brasil é onde ela termina.
+        </p>
+      </div>
+
+    </div><!-- end narrative-text -->
+  </div><!-- end narrative-body -->
+</section>
+
+<!-- ══ EDUCATION ══ -->
+<section id="education">
+  <div class="section-header reveal">
+    <span class="section-num">03</span>
+    <h2 data-en="Education" data-pt="Formação Acadêmica">Education</h2>
     <div class="section-line"></div>
   </div>
 
   <div class="edu-card reveal">
     <div class="edu-school">Lafayette College</div>
-    <div class="edu-period">2026 — Present · Easton, Pennsylvania, USA</div>
-    <div class="edu-detail">Accepted Early Decision I. Incoming member of the Class of 2030.</div>
+    <div class="edu-period" data-en="2026 — Present · Easton, Pennsylvania, USA" data-pt="2026 — Presente · Easton, Pennsylvania, EUA">2026 — Present · Easton, Pennsylvania, USA</div>
+    <div class="edu-detail" data-en="Accepted Early Decision I. Incoming member of the Class of 2030. Electrical &amp; Computer Engineering. ~90% merit scholarship." data-pt="Aceito via Early Decision I. Membro entrante da Turma de 2030. Engenharia Elétrica e de Computação. ~90% de bolsa por mérito.">Accepted Early Decision I. Incoming member of the Class of 2030. Electrical &amp; Computer Engineering. ~90% merit scholarship.</div>
   </div>
 
   <div class="edu-card reveal">
     <div class="edu-school">St. Paul's School</div>
-    <div class="edu-period">2022 — Present · São Paulo, Brazil</div>
+    <div class="edu-period" data-en="2022 — Present · São Paulo, Brazil" data-pt="2022 — Presente · São Paulo, Brasil">2022 — Present · São Paulo, Brazil</div>
     <div class="edu-detail">
-      <strong style="color:var(--white)">IB Diploma Programme (2024–2026)</strong><br>
-      HL: Physics · Computer Science · Mathematics Analysis &amp; Approaches<br>
-      SL: English Language &amp; Literature · Portuguese Literature · Economics
+      <strong style="color:var(--white)" data-en="IB Diploma Programme (2024–2026)" data-pt="Programa de Diploma IB (2024–2026)">IB Diploma Programme (2024–2026)</strong><br>
+      <span data-en="HL: Physics · Computer Science · Mathematics AA" data-pt="NS: Física · Ciências da Computação · Matemática AA">HL: Physics · Computer Science · Mathematics AA</span><br>
+      <span data-en="SL: English Lit. · Portuguese Lit. · Economics" data-pt="NR: Literatura Inglesa · Literatura Portuguesa · Economia">SL: English Lit. · Portuguese Lit. · Economics</span>
     </div>
     <div style="margin-top:.75rem">
-      <span class="edu-badge">Extended Essay — LED Luminous Efficacy</span>
-      <span class="edu-badge">School Council Rep</span>
-      <span class="edu-badge">Digital Ambassador</span>
+      <span class="edu-badge" data-en="Extended Essay — LED Luminous Efficacy" data-pt="Monografia — Eficácia Luminosa de LEDs">Extended Essay — LED Luminous Efficacy</span>
+      <span class="edu-badge" data-en="CS Internal Assessment — Java/SQL System" data-pt="IA de CS — Sistema Java/SQL">CS IA — Java/SQL System</span>
+      <span class="edu-badge" data-en="Full Scholarship" data-pt="Bolsa Integral">Full Scholarship</span>
     </div>
   </div>
 
   <div class="edu-card reveal">
     <div class="edu-school">St. Paul's School — IGCSE</div>
-    <div class="edu-period">2022 — 2024 · São Paulo, Brazil</div>
-    <div class="edu-detail">
-      Mathematics A* · Physics A* · Chemistry A* · Computer Science A* · Music A* · Spanish A* · Biology A · English Literature A
-    </div>
+    <div class="edu-period" data-en="2022 — 2024 · São Paulo, Brazil" data-pt="2022 — 2024 · São Paulo, Brasil">2022 — 2024 · São Paulo, Brazil</div>
+    <div class="edu-detail" data-en="Mathematics A* · Physics A* · Chemistry A* · Computer Science A* · Music A* · Spanish A* · Biology A · English Literature A" data-pt="Matemática A* · Física A* · Química A* · Ciências da Computação A* · Música A* · Espanhol A* · Biologia A · Literatura Inglesa A">Mathematics A* · Physics A* · Chemistry A* · Computer Science A* · Music A* · Spanish A* · Biology A · English Literature A</div>
   </div>
 
   <div class="edu-card reveal">
-    <div class="edu-school">Yale Young Global Scholars — IST Track</div>
-    <div class="edu-period">July 2024 · New Haven, Connecticut, USA</div>
-    <div class="edu-detail">
-      Two-week academic enrichment programme. Attended graduate-level seminars and completed a group project on <em>nuclear propulsion for rockets</em>. One of fewer than 3% of applicants selected globally.
-    </div>
+    <div class="edu-school" data-en="Yale Young Global Scholars — IST Track" data-pt="Yale Young Global Scholars — Trilha IST">Yale Young Global Scholars — IST Track</div>
+    <div class="edu-period" data-en="July 2024 · New Haven, Connecticut, USA" data-pt="Julho de 2024 · New Haven, Connecticut, EUA">July 2024 · New Haven, Connecticut, USA</div>
+    <div class="edu-detail" data-en="Two-week academic enrichment programme. Graduate-level seminars across physics, engineering, and innovation. Group project on nuclear propulsion for rockets." data-pt="Programa de enriquecimento acadêmico de duas semanas. Seminários de nível pós-graduação em física, engenharia e inovação. Projeto em grupo sobre propulsão nuclear para foguetes.">Two-week academic enrichment programme. Graduate-level seminars across physics, engineering, and innovation. Group project on nuclear propulsion for rockets.</div>
   </div>
 
   <div class="edu-card reveal">
     <div class="edu-school">Colégio Objetivo</div>
-    <div class="edu-period">2017 — 2022 · São Paulo, Brazil</div>
-    <div class="edu-detail">Primary and lower secondary education. Early foundations in mathematics and sciences.</div>
+    <div class="edu-period" data-en="2017 — 2022 · São Paulo, Brazil · Full Scholarship" data-pt="2017 — 2022 · São Paulo, Brasil · Bolsa Integral">2017 — 2022 · São Paulo, Brazil · Full Scholarship</div>
+    <div class="edu-detail" data-en="Full-scholarship placement from 5th year of Ensino Fundamental through Ensino Médio. Foundations in mathematics, sciences, and competitive Olympiad preparation." data-pt="Bolsa integral a partir do 5º ano do Ensino Fundamental. Base sólida em matemática, ciências e preparação para olimpíadas científicas.">Full-scholarship placement from 5th year of Ensino Fundamental through Ensino Médio.</div>
   </div>
 </section>
 
-<!-- EXPERIENCE -->
+<!-- ══ EXPERIENCE ══ -->
 <section id="experience">
   <div class="section-header reveal">
-    <span class="section-num">03</span>
-    <h2>Experience &amp; Projects</h2>
+    <span class="section-num">04</span>
+    <h2 data-en="Experience &amp; Projects" data-pt="Experiência e Projetos">Experience &amp; Projects</h2>
     <div class="section-line"></div>
   </div>
   <div class="exp-grid">
 
     <div class="exp-card reveal">
-      <div class="exp-type">Community · Leadership</div>
-      <div class="exp-title">Code Kids — Project Leader</div>
-      <div class="exp-org">EE Carlos Maximiliano · Aug 2022 – Present</div>
-      <div class="exp-desc">Lead a team of 8 volunteers teaching Python to 11–14 year-olds in a state school in Vila Madalena. Programme has reached 40+ children in its sixth year. Began as instructor and was promoted to leader in 2024.</div>
+      <div class="exp-type" data-en="Community · Leadership" data-pt="Comunidade · Liderança">Community · Leadership</div>
+      <div class="exp-title" data-en="Code Kids — Project Leader" data-pt="Code Kids — Líder do Projeto">Code Kids — Project Leader</div>
+      <div class="exp-org" data-en="EE Carlos Maximiliano · Aug 2022 – Present" data-pt="EE Carlos Maximiliano · Ago 2022 – Presente">EE Carlos Maximiliano · Aug 2022 – Present</div>
+      <div class="exp-desc lang-en">Lead a team of 8 volunteers teaching Python to 11–14 year-olds in a state school in Vila Madalena. 40+ children reached in 6 years. Began as instructor, promoted to leader in 2024. Created the curriculum from scratch.</div>
+      <div class="exp-desc lang-pt" style="display:none;">Lidero uma equipe de 8 voluntários ensinando Python para crianças de 11 a 14 anos em uma escola estadual em Vila Madalena. Mais de 40 alunos alcançados em 6 anos. Comecei como instrutor e assumi a liderança em 2024. Criei o currículo do zero.</div>
     </div>
 
     <div class="exp-card reveal">
-      <div class="exp-type">School · Leadership</div>
-      <div class="exp-title">Digital Ambassador</div>
-      <div class="exp-org">St. Paul's School · Jun 2023 – Present</div>
-      <div class="exp-desc">Teaches weekly Python lessons to Forms 1–3, preparing students for the Brazilian Informatics Olympiad (OBI). Advocates for responsible technology use alongside school Digital Leaders.</div>
+      <div class="exp-type" data-en="Competition · Innovation" data-pt="Competição · Inovação">Competition · Innovation</div>
+      <div class="exp-title" data-en="Intelli Camp — 1st Place" data-pt="Intelli Camp — 1º Lugar">Intelli Camp — 1st Place</div>
+      <div class="exp-org" data-en="July 2025" data-pt="Julho de 2025">July 2025</div>
+      <div class="exp-desc lang-en">Won first place among 12 teams and 100+ participants. Built a complete MVP of an automated social listening tool integrating NLP, AI, and business strategy in five days. Presented to a jury including major tech influencer Manuela Cit.</div>
+      <div class="exp-desc lang-pt" style="display:none;">1º lugar entre 12 equipes e mais de 100 participantes. Construímos um MVP completo de ferramenta de social listening automatizado integrando PLN, IA e estratégia de negócios em cinco dias. Apresentado a uma banca com a influenciadora Manuela Cit.</div>
     </div>
 
     <div class="exp-card reveal">
-      <div class="exp-type">Competition · Innovation</div>
-      <div class="exp-title">Intelli Camp — 1st Place</div>
-      <div class="exp-org">July 2025</div>
-      <div class="exp-desc">Won first place among 12 teams and 100+ participants. Built a complete MVP of an automated social listening tool integrating NLP, AI, and business strategy in five intensive days.</div>
+      <div class="exp-type" data-en="Academic · Engineering" data-pt="Acadêmico · Engenharia">Academic · Engineering</div>
+      <div class="exp-title" data-en="Lost &amp; Found Management System" data-pt="Sistema de Gerenciamento de Achados e Perdidos">Lost &amp; Found Management System</div>
+      <div class="exp-org" data-en="St. Paul's School · IB CS IA · 2024–2025" data-pt="St. Paul's School · IA de CS do IB · 2024–2025">St. Paul's School · IB CS IA · 2024–2025</div>
+      <div class="exp-desc lang-en">Designed and built a complete database management system in Java with a GUI and relational SQL database for a real client — the school's Digital Development Coordinator. System was demonstrated and approved for deployment.</div>
+      <div class="exp-desc lang-pt" style="display:none;">Projetei e construí um sistema completo de gerenciamento de banco de dados em Java com interface gráfica e banco SQL relacional para um cliente real — o Coordenador de Desenvolvimento Digital da escola. Sistema foi demonstrado e aprovado para implementação.</div>
     </div>
 
     <div class="exp-card reveal">
-      <div class="exp-type">Industry · Work Shadowing</div>
-      <div class="exp-title">Work Shadowing</div>
-      <div class="exp-org">VIVO Telecomunicações · April 2025</div>
-      <div class="exp-desc">One-week immersion at one of Brazil's leading telcos. Attended department lectures, visited infrastructure centres, and engaged with executives across technical and operational roles.</div>
+      <div class="exp-type" data-en="School · Leadership" data-pt="Escola · Liderança">School · Leadership</div>
+      <div class="exp-title" data-en="Digital Ambassador" data-pt="Embaixador Digital">Digital Ambassador</div>
+      <div class="exp-org" data-en="St. Paul's School · Jun 2023 – Present" data-pt="St. Paul's School · Jun 2023 – Presente">St. Paul's School · Jun 2023 – Present</div>
+      <div class="exp-desc lang-en">Teaches weekly Python lessons to Forms 1–3, preparing students for the Brazilian Informatics Olympiad (OBI). Promotes responsible technology use alongside school Digital Leaders.</div>
+      <div class="exp-desc lang-pt" style="display:none;">Ministra aulas semanais de Python para os anos 6 ao 8, preparando alunos para a Olimpíada Brasileira de Informática (OBI). Promove o uso responsável de tecnologia junto aos Líderes Digitais da escola.</div>
     </div>
 
     <div class="exp-card reveal">
-      <div class="exp-type">Teaching · Community</div>
-      <div class="exp-title">JuntosNaTech — Java Instructor</div>
-      <div class="exp-org">Instituto Unidos de Paraisópolis · May 2025 – Sep 2026</div>
-      <div class="exp-desc">Teaching basic and intermediate Java programming as part of an initiative to democratise technology access in underserved communities.</div>
+      <div class="exp-type" data-en="Industry · Work Shadowing" data-pt="Indústria · Observação Profissional">Industry · Work Shadowing</div>
+      <div class="exp-title" data-en="Work Shadowing" data-pt="Observação Profissional">Work Shadowing</div>
+      <div class="exp-org" data-en="VIVO Telecomunicações · April 2025" data-pt="VIVO Telecomunicações · Abril de 2025">VIVO Telecomunicações · April 2025</div>
+      <div class="exp-desc lang-en">One-week immersion at one of Brazil's leading telcos. Attended department lectures, visited infrastructure centres, and engaged with executives across technical and operational roles.</div>
+      <div class="exp-desc lang-pt" style="display:none;">Imersão de uma semana em uma das principais telecomunicações do Brasil. Participei de palestras departamentais, visitei centros de infraestrutura e interagi com executivos de áreas técnicas e operacionais.</div>
     </div>
 
     <div class="exp-card reveal">
-      <div class="exp-type">Teaching · AI</div>
-      <div class="exp-title">AI, Python &amp; Machine Learning Enrichment</div>
-      <div class="exp-org">Co-taught · Aug 2025 – Present</div>
-      <div class="exp-desc">Co-designed and co-teaches a course on responsible AI use, Python data extraction from large databases, and ML fundamentals. Regularly shares curated resources and industry updates.</div>
+      <div class="exp-type" data-en="Research · Mathematics" data-pt="Pesquisa · Matemática">Research · Mathematics</div>
+      <div class="exp-title" data-en="Mathematical Modelling of Rowing Motion" data-pt="Modelagem Matemática do Remo">Mathematical Modelling of Rowing Motion</div>
+      <div class="exp-org" data-en="Independent Research · Aug 2025 – Present" data-pt="Pesquisa Independente · Ago 2025 – Presente">Independent Research · Aug 2025 – Present</div>
+      <div class="exp-desc lang-en">Models 1D boat movement using Physics and higher derivatives. Analysed World Rowing Championship velocity data; demonstrated why constant speed is more energy-efficient than oscillating acceleration.</div>
+      <div class="exp-desc lang-pt" style="display:none;">Modela o movimento unidimensional de barcos a remo usando Física e derivadas de ordem superior. Analisou dados do Campeonato Mundial de Remo; demonstrou por que velocidade constante é mais eficiente energeticamente.</div>
     </div>
 
     <div class="exp-card reveal">
-      <div class="exp-type">Research · Mathematics</div>
-      <div class="exp-title">Mathematical Modelling of Rowing Motion</div>
-      <div class="exp-org">Independent Research · Aug 2025 – Present</div>
-      <div class="exp-desc">Models 1D boat movement using Physics and higher derivatives. Analysed World Rowing Championship velocity data; demonstrated why constant speed is more energy-efficient than oscillating acceleration.</div>
+      <div class="exp-type" data-en="Teaching · AI" data-pt="Ensino · IA">Teaching · AI</div>
+      <div class="exp-title" data-en="AI, Python &amp; ML Enrichment Course" data-pt="Curso de IA, Python e ML">AI, Python &amp; ML Enrichment Course</div>
+      <div class="exp-org" data-en="Co-taught · Aug 2025 – Present" data-pt="Co-ministrado · Ago 2025 – Presente">Co-taught · Aug 2025 – Present</div>
+      <div class="exp-desc lang-en">Co-designed and co-teaches a course on responsible AI, Python data extraction, and ML fundamentals. Regularly shares curated resources and industry updates with students.</div>
+      <div class="exp-desc lang-pt" style="display:none;">Co-criou e co-ministra um curso sobre uso responsável de IA, extração de dados com Python e fundamentos de Machine Learning. Compartilha recursos e atualizações do setor com os alunos.</div>
     </div>
 
     <div class="exp-card reveal">
-      <div class="exp-type">Conference · Tech</div>
-      <div class="exp-title">HackTown 2025 Attendee</div>
-      <div class="exp-org">Santa Rita do Sapucaí · Jul–Aug 2025</div>
-      <div class="exp-desc">Attended Brazil's flagship tech &amp; entrepreneurship festival. Explored quantum computing startups, automation with Node-RED and n8n, AI risk, cybersecurity, and low-code platforms.</div>
+      <div class="exp-type" data-en="Conference · Tech" data-pt="Conferência · Tecnologia">Conference · Tech</div>
+      <div class="exp-title" data-en="HackTown 2025" data-pt="HackTown 2025">HackTown 2025</div>
+      <div class="exp-org" data-en="Santa Rita do Sapucaí · Jul–Aug 2025" data-pt="Santa Rita do Sapucaí · Jul–Ago 2025">Santa Rita do Sapucaí · Jul–Aug 2025</div>
+      <div class="exp-desc lang-en">Attended Brazil's flagship tech &amp; entrepreneurship festival. Explored quantum computing startups, automation with Node-RED and n8n, AI risk, cybersecurity, and challenges facing Brazilian SMEs.</div>
+      <div class="exp-desc lang-pt" style="display:none;">Participou do principal festival de tecnologia e empreendedorismo do Brasil. Explorou startups de computação quântica, automação com Node-RED e n8n, riscos de IA, cibersegurança e desafios das PMEs brasileiras.</div>
     </div>
 
     <div class="exp-card reveal">
-      <div class="exp-type">Service · Education</div>
-      <div class="exp-title">We Teach — English Tutor</div>
-      <div class="exp-org">Alessandro Zarzur Foundation · 2023–2024</div>
-      <div class="exp-desc">Delivered tailored online English lessons to students at FAZ, aligning content with their school curriculum as part of a community service initiative.</div>
+      <div class="exp-type" data-en="Academic · Society" data-pt="Acadêmico · Sociedade">Academic · Society</div>
+      <div class="exp-title" data-en="Engineering Society — Lead Member" data-pt="Sociedade de Engenharia — Membro Líder">Engineering Society — Lead Member</div>
+      <div class="exp-org" data-en="St. Paul's School · Aug 2025 – Present" data-pt="St. Paul's School · Ago 2025 – Presente">St. Paul's School · Aug 2025 – Present</div>
+      <div class="exp-desc lang-en">Delivered formal presentations on the History of Artificial Intelligence and on GPU/CPU/TPU architecture and their role in machine learning and high-performance computing.</div>
+      <div class="exp-desc lang-pt" style="display:none;">Realizou apresentações formais sobre A História da Inteligência Artificial e sobre arquitetura GPU/CPU/TPU e seu papel no aprendizado de máquina e computação de alto desempenho.</div>
     </div>
 
     <div class="exp-card reveal">
-      <div class="exp-type">Academic · Society</div>
-      <div class="exp-title">Engineering Society — Lead Member</div>
-      <div class="exp-org">St. Paul's School · Aug 2025 – Present</div>
-      <div class="exp-desc">Delivered formal presentations on the History of Artificial Intelligence and on GPU/CPU/TPU architecture and their role in machine learning and high-performance computing.</div>
+      <div class="exp-type" data-en="Service · Education" data-pt="Serviço · Educação">Service · Education</div>
+      <div class="exp-title" data-en="We Teach — English Tutor" data-pt="We Teach — Tutor de Inglês">We Teach — English Tutor</div>
+      <div class="exp-org" data-en="Alessandro Zarzur Foundation · 2023–2024" data-pt="Fundação Alessandro Zarzur · 2023–2024">Alessandro Zarzur Foundation · 2023–2024</div>
+      <div class="exp-desc lang-en">Delivered tailored online English lessons to students at FAZ, aligning content with their regular school curriculum as part of a community service initiative.</div>
+      <div class="exp-desc lang-pt" style="display:none;">Ministrou aulas particulares de inglês online para alunos da Fundação Alessandro Zarzur, alinhando o conteúdo ao currículo regular de cada estudante.</div>
     </div>
 
   </div>
 </section>
 
-<!-- AWARDS -->
+<!-- ══ AWARDS ══ -->
 <section id="awards">
   <div class="section-header reveal">
-    <span class="section-num">04</span>
-    <h2>Honours &amp; Awards</h2>
+    <span class="section-num">05</span>
+    <h2 data-en="Honours &amp; Awards" data-pt="Honrarias e Prêmios">Honours &amp; Awards</h2>
     <div class="section-line"></div>
   </div>
   <div class="awards-columns">
     <div class="award-group reveal">
-      <h3>International</h3>
-      <div class="award-item">
-        <span class="award-year">2025</span>
-        <span class="award-name"><strong>Gold — Duke of Edinburgh's Award</strong></span>
-      </div>
-      <div class="award-item">
-        <span class="award-year">2024</span>
-        <span class="award-name"><strong>Silver — Duke of Edinburgh's Award</strong></span>
-      </div>
-      <div class="award-item">
-        <span class="award-year">2024</span>
-        <span class="award-name"><strong>Bronze — UKMT Intermediate Mathematical Challenge</strong></span>
-      </div>
-      <div class="award-item">
-        <span class="award-year">2023</span>
-        <span class="award-name"><strong>Bronze — Duke of Edinburgh's Award</strong></span>
-      </div>
-      <div class="award-item">
-        <span class="award-year">2017</span>
-        <span class="award-name">Honour to Merit — Maths Kangaroo</span>
-      </div>
-      <h3 style="margin-top:2rem">Music (LCME)</h3>
-      <div class="award-item">
-        <span class="award-year">2023</span>
-        <span class="award-name">LCM Theory Grade 3</span>
-      </div>
-      <div class="award-item">
-        <span class="award-year">2022</span>
-        <span class="award-name">LCM Theory Grade 2</span>
-      </div>
+      <h3 data-en="International" data-pt="Internacional">International</h3>
+      <div class="award-item"><span class="award-year">2025</span><span class="award-name"><strong data-en="Gold — Duke of Edinburgh's Award" data-pt="Ouro — Duke of Edinburgh's Award">Gold — Duke of Edinburgh's Award</strong></span></div>
+      <div class="award-item"><span class="award-year">2024</span><span class="award-name"><strong data-en="Silver — Duke of Edinburgh's Award" data-pt="Prata — Duke of Edinburgh's Award">Silver — Duke of Edinburgh's Award</strong></span></div>
+      <div class="award-item"><span class="award-year">2024</span><span class="award-name"><strong data-en="Bronze — UKMT Intermediate Maths Challenge" data-pt="Bronze — UKMT Intermediate Maths Challenge">Bronze — UKMT Intermediate Maths Challenge</strong></span></div>
+      <div class="award-item"><span class="award-year">2023</span><span class="award-name" data-en="Bronze — Duke of Edinburgh's Award" data-pt="Bronze — Duke of Edinburgh's Award">Bronze — Duke of Edinburgh's Award</span></div>
+      <div class="award-item"><span class="award-year">2017</span><span class="award-name" data-en="Honour to Merit — Maths Kangaroo" data-pt="Menção Honrosa — Kangaroo de Matemática">Honour to Merit — Maths Kangaroo</span></div>
+      <h3 style="margin-top:2rem" data-en="Music (LCME)" data-pt="Música (LCME)">Music (LCME)</h3>
+      <div class="award-item"><span class="award-year">2023</span><span class="award-name" data-en="LCM Theory Grade 3" data-pt="Teoria Musical Grau 3">LCM Theory Grade 3</span></div>
+      <div class="award-item"><span class="award-year">2022</span><span class="award-name" data-en="LCM Theory Grade 2" data-pt="Teoria Musical Grau 2">LCM Theory Grade 2</span></div>
     </div>
     <div class="award-group reveal">
-      <h3>National (Brazil)</h3>
-      <div class="award-item">
-        <span class="award-year">2023</span>
-        <span class="award-name"><strong>Silver — OBF</strong> (Brazilian Physics Olympiad)</span>
-      </div>
-      <div class="award-item">
-        <span class="award-year">2021</span>
-        <span class="award-name"><strong>Bronze — OBQjr</strong> (Junior Chemistry Olympiad)</span>
-      </div>
-      <div class="award-item">
-        <span class="award-year">2021</span>
-        <span class="award-name">Honour to Merit — OBA (Astronomy Olympiad)</span>
-      </div>
-      <div class="award-item">
-        <span class="award-year">2020</span>
-        <span class="award-name"><strong>Gold — OBA</strong> (Astronomy Olympiad)</span>
-      </div>
-      <div class="award-item">
-        <span class="award-year">2019</span>
-        <span class="award-name"><strong>Gold — OBA</strong> (Astronomy Olympiad)</span>
-      </div>
+      <h3 data-en="National (Brazil)" data-pt="Nacional (Brasil)">National (Brazil)</h3>
+      <div class="award-item"><span class="award-year">2023</span><span class="award-name"><strong data-en="Silver — OBF (Brazilian Physics Olympiad)" data-pt="Prata — OBF (Olimpíada Brasileira de Física)">Silver — OBF (Brazilian Physics Olympiad)</strong></span></div>
+      <div class="award-item"><span class="award-year">2021</span><span class="award-name"><strong data-en="Bronze — OBQjr (Junior Chemistry Olympiad)" data-pt="Bronze — OBQjr (Olimpíada de Química Júnior)">Bronze — OBQjr</strong></span></div>
+      <div class="award-item"><span class="award-year">2021</span><span class="award-name" data-en="Honour to Merit — OBA (Astronomy)" data-pt="Menção Honrosa — OBA (Astronomia)">Honour to Merit — OBA</span></div>
+      <div class="award-item"><span class="award-year">2020</span><span class="award-name"><strong data-en="Gold — OBA (Brazilian Astronomy Olympiad)" data-pt="Ouro — OBA (Olimpíada Brasileira de Astronomia)">Gold — OBA</strong></span></div>
+      <div class="award-item"><span class="award-year">2019</span><span class="award-name"><strong data-en="Gold — OBA (Brazilian Astronomy Olympiad)" data-pt="Ouro — OBA (Olimpíada Brasileira de Astronomia)">Gold — OBA</strong></span></div>
     </div>
     <div class="award-group reveal">
-      <h3>School Prizes</h3>
-      <div class="award-item">
-        <span class="award-year">2024</span>
-        <span class="award-name"><strong>Excellence in Physics</strong> — St. Paul's School</span>
-      </div>
-      <div class="award-item">
-        <span class="award-year">2023</span>
-        <span class="award-name"><strong>Excellence in BraSS</strong> — Brazilian Social Studies</span>
-      </div>
-      <div class="award-item">
-        <span class="award-year">2023</span>
-        <span class="award-name">House Award — Outstanding participation</span>
-      </div>
-      <h3 style="margin-top:2rem">State</h3>
-      <div class="award-item">
-        <span class="award-year">2018</span>
-        <span class="award-name"><strong>Silver — OPF</strong> (State Physics Olympiad)</span>
-      </div>
-      <div class="award-item">
-        <span class="award-year">2017</span>
-        <span class="award-name"><strong>Gold — OPF Júnior</strong> (State Physics Olympiad)</span>
-      </div>
+      <h3 data-en="School Prizes" data-pt="Prêmios Escolares">School Prizes</h3>
+      <div class="award-item"><span class="award-year">2024</span><span class="award-name"><strong data-en="Excellence in Physics — St. Paul's" data-pt="Excelência em Física — St. Paul's">Excellence in Physics — St. Paul's</strong></span></div>
+      <div class="award-item"><span class="award-year">2023</span><span class="award-name" data-en="Excellence in BraSS — Brazilian Social Studies" data-pt="Excelência em BraSS — Estudos Sociais Brasileiros">Excellence in BraSS</span></div>
+      <div class="award-item"><span class="award-year">2023</span><span class="award-name" data-en="House Award — Outstanding participation" data-pt="Prêmio de Casa — Participação destacada">House Award — Outstanding participation</span></div>
+      <h3 style="margin-top:2rem" data-en="State" data-pt="Estadual">State</h3>
+      <div class="award-item"><span class="award-year">2018</span><span class="award-name"><strong data-en="Silver — OPF (State Physics Olympiad)" data-pt="Prata — OPF (Olimpíada Paulista de Física)">Silver — OPF</strong></span></div>
+      <div class="award-item"><span class="award-year">2017</span><span class="award-name"><strong data-en="Gold — OPF Júnior" data-pt="Ouro — OPF Júnior">Gold — OPF Júnior</strong></span></div>
     </div>
   </div>
 </section>
 
-<!-- BEYOND -->
+<!-- ══ BEYOND ══ -->
 <section id="beyond">
   <div class="section-header reveal">
-    <span class="section-num">05</span>
-    <h2>Beyond the Desk</h2>
+    <span class="section-num">06</span>
+    <h2 data-en="Beyond the Desk" data-pt="Além da Mesa">Beyond the Desk</h2>
     <div class="section-line"></div>
   </div>
   <div class="beyond-grid">
     <div class="beyond-card reveal">
       <div class="beyond-icon">🚣</div>
-      <div class="beyond-title">Competitive Rowing</div>
-      <div class="beyond-period">2022 — 2025</div>
-      <div class="beyond-desc">Completed a 4,000m regatta in a single scull in 21:08. Experienced across multiple boat types. Rowing inspired my mathematical modelling research into the biomechanics of sculling.</div>
+      <div class="beyond-title" data-en="Competitive Rowing" data-pt="Remo Competitivo">Competitive Rowing</div>
+      <div class="beyond-period" data-en="2022 — 2025" data-pt="2022 — 2025">2022 — 2025</div>
+      <div class="beyond-desc lang-en">Completed a 4,000m regatta in a single scull in 21:08. Rowing inspired my mathematical modelling research and taught me that consistency, not intensity, is what compounds.</div>
+      <div class="beyond-desc lang-pt" style="display:none;">Completei uma regata de 4.000m no skiff individual em 21:08. O remo inspirou minha pesquisa de modelagem matemática e me ensinou que consistência, não intensidade, é o que se acumula.</div>
     </div>
     <div class="beyond-card reveal">
       <div class="beyond-icon">🎵</div>
-      <div class="beyond-title">School Choir &amp; Singing</div>
-      <div class="beyond-period">2024 — Present</div>
-      <div class="beyond-desc">Active choir member and weekly private voice student. Performed at Christmas Service and Remembrance Day. Music has taught me that harmony begins with listening.</div>
+      <div class="beyond-title" data-en="Choir &amp; Singing" data-pt="Coral e Canto">Choir &amp; Singing</div>
+      <div class="beyond-period" data-en="2024 — Present" data-pt="2024 — Presente">2024 — Present</div>
+      <div class="beyond-desc lang-en">Active choir member with weekly private voice lessons. Performed at Christmas Service and Remembrance Day. Music taught me that harmony begins with listening.</div>
+      <div class="beyond-desc lang-pt" style="display:none;">Membro ativo do coral com aulas particulares semanais de canto. Apresentei no Culto de Natal e no Dia do Armistício. A música me ensinou que a harmonia começa com a escuta.</div>
     </div>
     <div class="beyond-card reveal">
       <div class="beyond-icon">🥋</div>
-      <div class="beyond-title">Kung Fu</div>
-      <div class="beyond-period">2025 — Present</div>
-      <div class="beyond-desc">Pursuing Kung Fu as a discipline of precision and body awareness. The principle that guides me: not the strongest but the most precise wins.</div>
+      <div class="beyond-title" data-en="Kung Fu" data-pt="Kung Fu">Kung Fu</div>
+      <div class="beyond-period" data-en="2025 — Present" data-pt="2025 — Presente">2025 — Present</div>
+      <div class="beyond-desc lang-en">Pursuing Kung Fu as a discipline of precision and intentional movement. The guiding principle: not the strongest but the most precise wins.</div>
+      <div class="beyond-desc lang-pt" style="display:none;">Pratico Kung Fu como disciplina de precisão e movimento intencional. O princípio orientador: não vence o mais forte, mas o mais preciso.</div>
     </div>
     <div class="beyond-card reveal">
       <div class="beyond-icon">🏫</div>
-      <div class="beyond-title">School Ambassador</div>
-      <div class="beyond-period">Jun 2023 — Present</div>
-      <div class="beyond-desc">Represents St. Paul's by guiding prospective families through campus, sharing what life at the school truly looks like from a student's perspective.</div>
+      <div class="beyond-title" data-en="School Ambassador" data-pt="Embaixador da Escola">School Ambassador</div>
+      <div class="beyond-period" data-en="Jun 2023 — Present" data-pt="Jun 2023 — Presente">Jun 2023 — Present</div>
+      <div class="beyond-desc lang-en">Represents St. Paul's by guiding prospective families through campus, sharing what student life truly looks like from the inside.</div>
+      <div class="beyond-desc lang-pt" style="display:none;">Representa a St. Paul's conduzindo visitas de famílias prospectivas pelo campus, compartilhando o que é a vida escolar por dentro.</div>
     </div>
     <div class="beyond-card reveal">
       <div class="beyond-icon">🏛️</div>
-      <div class="beyond-title">School Council Representative</div>
-      <div class="beyond-period">2023 — 2024</div>
-      <div class="beyond-desc">Worked directly with the Senior Leadership Team to identify and advocate for improvements to student life in the Senior School.</div>
+      <div class="beyond-title" data-en="School Council Rep." data-pt="Representante do Conselho">School Council Rep.</div>
+      <div class="beyond-period" data-en="2023 — 2024" data-pt="2023 — 2024">2023 — 2024</div>
+      <div class="beyond-desc lang-en">Worked directly with the Senior Leadership Team to advocate for improvements to student life across the Senior School.</div>
+      <div class="beyond-desc lang-pt" style="display:none;">Trabalhei diretamente com a Equipe de Liderança Sênior para defender melhorias na vida estudantil do Ensino Médio.</div>
     </div>
     <div class="beyond-card reveal">
-      <div class="beyond-icon">🔬</div>
-      <div class="beyond-title">Physics Olympiad Training</div>
-      <div class="beyond-period">May – Jul 2023</div>
-      <div class="beyond-desc">Monthly deep-dive workshops covering advanced Kinematics, Mechanics, Waves and Relativity. Preparation for the Brazilian Physics Olympiad where he earned Silver.</div>
+      <div class="beyond-icon">🔭</div>
+      <div class="beyond-title" data-en="Physics Olympiad Training" data-pt="Preparação para Olimpíadas de Física">Physics Olympiad Training</div>
+      <div class="beyond-period" data-en="May – Jul 2023" data-pt="Mai – Jul 2023">May – Jul 2023</div>
+      <div class="beyond-desc lang-en">Monthly workshops covering advanced Kinematics, Mechanics, Waves and Relativity — preparation for the OBF where I earned Silver.</div>
+      <div class="beyond-desc lang-pt" style="display:none;">Workshops semanais cobrindo Cinemática, Mecânica, Ondas e Relatividade avançados — preparação para a OBF onde conquistei a Prata.</div>
     </div>
   </div>
 </section>
 
-<!-- CONTACT -->
+<!-- ══ CONTACT ══ -->
 <section id="contact">
-  <div class="section-header reveal" style="justify-content:center; text-align:center;">
-    <h2 style="font-size: clamp(2rem, 4vw, 3.2rem)">Let's Connect</h2>
+  <div class="section-header reveal" style="justify-content:center;text-align:center;">
+    <h2 data-en="Let's Connect" data-pt="Vamos Conversar">Let's Connect</h2>
   </div>
-  <p class="contact-sub reveal">Whether you want to talk physics, build something together, or discuss education and community — I'm always glad to hear from you.</p>
+  <p class="contact-sub reveal" data-en="Whether you want to talk physics, build something together, or discuss education and community — I'm always glad to hear from you." data-pt="Se você quer falar sobre física, construir algo juntos, ou discutir educação e comunidade — fico feliz em ouvir você.">Whether you want to talk physics, build something together, or discuss education and community — I'm always glad to hear from you.</p>
   <div class="contact-links reveal">
-    <a href="mailto:giordanoparaujo2@gmail.com" class="contact-link">
-      <span class="dot"></span>giordanoparaujo2@gmail.com
-    </a>
-    <a href="mailto:gpa1@stpauls.br" class="contact-link">
-      <span class="dot"></span>gpa1@stpauls.br
-    </a>
-    <a href="https://github.com/giordano-blip" class="contact-link" target="_blank">
-      <span class="dot"></span>GitHub
-    </a>
-    <a href="https://www.linkedin.com/in/giordano-araujo-8326a1320" class="contact-link" target="_blank">
-      <span class="dot"></span>LinkedIn
-    </a>
+    <a href="mailto:giordanoparaujo2@gmail.com" class="contact-link"><span class="dot"></span>giordanoparaujo2@gmail.com</a>
+    <a href="mailto:gpa1@stpauls.br" class="contact-link"><span class="dot"></span>gpa1@stpauls.br</a>
+    <a href="https://github.com/giordano-blip" class="contact-link" target="_blank"><span class="dot"></span>GitHub</a>
+    <a href="https://www.linkedin.com/in/giordano-araujo-8326a1320" class="contact-link" target="_blank"><span class="dot"></span>LinkedIn</a>
+    <a href="https://thegiordano.tech" class="contact-link" target="_blank"><span class="dot"></span>thegiordano.tech</a>
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <span class="footer-note">© 2025 Giordano Piwowarczyk Araujo — thegiordano.tech</span>
-  <span class="footer-note">Built with purpose. Hosted on GitHub Pages.</span>
+  <span class="footer-note lang-en">Built with purpose. Hosted on GitHub Pages.</span>
+  <span class="footer-note lang-pt" style="display:none;">Construído com propósito. Hospedado no GitHub Pages.</span>
 </footer>
 
+</div><!-- end #main-site -->
+
 <script>
-  // Scroll-reveal
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        observer.unobserve(e.target);
+  let currentLang = 'en';
+
+  function selectLang(lang) {
+    currentLang = lang;
+    document.getElementById('lang-selector').classList.add('hidden');
+    const main = document.getElementById('main-site');
+    main.classList.add('visible');
+    setTimeout(() => main.classList.add('faded-in'), 50);
+    applyLang(lang);
+    initReveal();
+    initNarrativeScroll();
+  }
+
+  function toggleLang() {
+    currentLang = currentLang === 'en' ? 'pt' : 'en';
+    applyLang(currentLang);
+  }
+
+  function applyLang(lang) {
+    // Set theme
+    document.documentElement.setAttribute('data-theme', lang);
+    document.documentElement.setAttribute('lang', lang === 'pt' ? 'pt-BR' : 'en');
+
+    // Toggle nav button label
+    const btn = document.getElementById('nav-lang-btn');
+    btn.textContent = lang === 'en' ? 'PT-BR' : 'ENG';
+
+    // Apply data-en / data-pt text to elements
+    document.querySelectorAll('[data-en]').forEach(el => {
+      const text = el.getAttribute(`data-${lang}`);
+      if (text) {
+        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+          el.placeholder = text;
+        } else {
+          el.innerHTML = text;
+        }
       }
     });
-  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    // Toggle lang-en / lang-pt visibility
+    document.querySelectorAll('.lang-en').forEach(el => {
+      el.style.display = lang === 'en' ? '' : 'none';
+    });
+    document.querySelectorAll('.lang-pt').forEach(el => {
+      el.style.display = lang === 'pt' ? '' : 'none';
+    });
+  }
+
+  // ── Scroll-reveal ──
+  function initReveal() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  }
+
+  // ── Narrative timeline active state ──
+  function initNarrativeScroll() {
+    const chapters = ['ch1','ch2','ch3','ch4','ch5','ch6','ch7'];
+    const items = document.querySelectorAll('.timeline-item');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const id = e.target.id;
+          items.forEach(item => {
+            item.classList.toggle('active', item.getAttribute('data-chapter') === id);
+          });
+        }
+      });
+    }, { threshold: 0.5, rootMargin: '-20% 0px -60% 0px' });
+
+    chapters.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    // Click to scroll
+    items.forEach(item => {
+      item.addEventListener('click', () => {
+        const id = item.getAttribute('data-chapter');
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    });
+  }
 </script>
 </body>
 </html>
